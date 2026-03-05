@@ -1,0 +1,188 @@
+{
+  "name": "immich-plugin-core",
+  "version": "2.0.1",
+  "title": "Immich Core Plugin",
+  "description": "Core workflow capabilities for Immich",
+  "author": "Immich Team",
+  "wasmPath": "dist/plugin.wasm",
+  "methods": [
+    {
+      "name": "filterFileName",
+      "title": "Filter by filename",
+      "description": "Filter assets by filename pattern using text matching or regular expressions",
+      "types": ["AssetV1"],
+      "schema": {
+        "type": "object",
+        "properties": {
+          "pattern": {
+            "type": "string",
+            "title": "Filename pattern",
+            "description": "Text or regex pattern to match against filename"
+          },
+          "matchType": {
+            "type": "string",
+            "title": "Match type",
+            "enum": ["contains", "regex", "exact"],
+            "default": "contains",
+            "description": "Type of pattern matching to perform"
+          },
+          "caseSensitive": {
+            "type": "boolean",
+            "default": false,
+            "title": "Case sensitive",
+            "description": "Whether matching should be case-sensitive"
+          }
+        },
+        "required": ["pattern"]
+      }
+    },
+    {
+      "name": "filterFileType",
+      "title": "Filter by file type",
+      "description": "Filter assets by file type",
+      "types": ["AssetV1"],
+      "schema": {
+        "type": "object",
+        "properties": {
+          "fileTypes": {
+            "title": "File types",
+            "description": "Allowed file types",
+            "type": "string",
+            "array": true,
+            "enum": ["image", "video"]
+          }
+        },
+        "required": ["fileTypes"]
+      }
+    },
+    {
+      "name": "filterPerson",
+      "title": "Filter by person",
+      "description": "Filter by detected person",
+      "types": ["AssetV1"],
+      "schema": {
+        "type": "object",
+        "properties": {
+          "personIds": {
+            "type": "string",
+            "array": true,
+            "title": "Person IDs",
+            "description": "List of person to match",
+            "uiHint": "personI"
+          },
+          "matchAny": {
+            "type": "boolean",
+            "default": true,
+            "description": "Match any name (true) or require all names (false)"
+          }
+        },
+        "required": ["personIds"]
+      }
+    },
+    {
+      "name": "assetArchive",
+      "title": "Archive",
+      "description": "Move the asset to archive",
+      "types": ["AssetV1"],
+      "schema": {}
+    },
+    {
+      "name": "assetFavorite",
+      "title": "Favorite",
+      "description": "Mark the asset as favorite or unfavorite",
+      "types": ["AssetV1"],
+      "schema": {
+        "type": "object",
+        "properties": {
+          "inverse": {
+            "type": "boolean",
+            "title": "Inverse",
+            "description": "Unfavorite by default, set to true to favorite instead",
+            "default": false
+          }
+        }
+      }
+    },
+    {
+      "name": "albumAddAssets",
+      "title": "Add to Album",
+      "description": "Add the item to a specified album",
+      "types": ["AssetV1"],
+      "schema": {
+        "type": "object",
+        "properties": {
+          "albumId": {
+            "type": "string",
+            "title": "Album ID",
+            "description": "Target album ID",
+            "uiHint": "albumId"
+          }
+        },
+        "required": ["albumId"]
+      }
+    },
+    {
+      "name": "test",
+      "title": "Test",
+      "description": "Test method with complete configuration examples",
+      "types": ["AssetV1"],
+      "schema": {
+        "type": "object",
+        "properties": {
+          "number1": {
+            "type": "number",
+            "title": "Number 1",
+            "description": "Basic number"
+          },
+          "number2": {
+            "type": "number",
+            "title": "Number 2",
+            "array": true,
+            "description": "List of numbers"
+          },
+          "string1": {
+            "type": "string",
+            "title": "String 1",
+            "description": "Basic string"
+          },
+          "string2": {
+            "type": "string",
+            "title": "String 2",
+            "array": true,
+            "description": "List of strings"
+          },
+          "string3": {
+            "type": "string",
+            "title": "String 3",
+            "enum": ["choice-1", "choice-2"],
+            "description": "Select from a list"
+          },
+          "nested": {
+            "type": "object",
+            "title": "Nested",
+            "description": "Nested properties for nesting",
+            "properties": {
+              "nested1": {
+                "type": "string",
+                "title": "Nested 1",
+                "description": "Nested string"
+              },
+              "nested2": {
+                "type": "number",
+                "title": "Nested 2",
+                "description": "Nested number"
+              }
+            }
+          },
+          "albumId": {
+            "type": "string",
+            "title": "Album ID",
+            "description": "Target album ID",
+            "uiHint": "albumId"
+          }
+        },
+        "required": ["albumId"]
+      }
+    }
+  ]
+}

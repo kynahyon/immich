@@ -2,7 +2,7 @@ experimental_monorepo_root = true
 
 [monorepo]
 config_roots = [
-  "packages/plugins",
+  "packages/plugin-core",
   "server",
   "packages/cli",
   "deployment",
@@ -40,6 +40,12 @@ macos-arm64 = { asset_pattern = "jellyfin-ffmpeg_*_portable_macarm64-gpl.tar.xz"
 [settings]
 experimental = true
 pin = true
+
+[tasks.plugins]
+run = [
+  "pnpm install --frozen-lockfile",
+  "pnpm --filter @immich/plugin-sdk --filter @immich/plugin-core build"
+]
 
 [tasks.open-api-typescript]
 run = [
