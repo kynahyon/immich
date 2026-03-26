@@ -21,6 +21,7 @@
           position: CommonPosition;
           timelineDay: TimelineDay;
           groupIndex: number;
+          isInViewport: boolean;
         },
       ]
     >;
@@ -105,8 +106,8 @@
       width={timelineDay.width}
       {customThumbnailLayout}
     >
-      {#snippet thumbnail({ asset, position })}
-        {@render thumbnailWithGroup({ asset, position, timelineDay, groupIndex })}
+      {#snippet thumbnail({ asset, position, isInViewport })}
+        {@render thumbnailWithGroup({ asset, position, timelineDay, groupIndex, isInViewport })}
       {/snippet}
     </AssetLayout>
   </section>

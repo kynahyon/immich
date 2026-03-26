@@ -21,6 +21,7 @@
         {
           asset: TimelineAsset;
           position: CommonPosition;
+          isInViewport: boolean;
         },
       ]
     >;
@@ -38,6 +39,7 @@
   {#each filterIsInOrNearViewport(viewerAssets) as viewerAsset (viewerAsset.id)}
     {@const position = viewerAsset.position!}
     {@const asset = viewerAsset.asset!}
+    {@const isInViewport = viewerAsset.isInViewport!}
 
     <!-- note: don't remove data-asset-id - its used by web e2e tests -->
     <div
@@ -50,7 +52,7 @@
       out:scale|global={{ start: 0.1, duration: scaleDuration }}
       animate:flip={{ duration: transitionDuration }}
     >
-      {@render thumbnail({ asset, position })}
+      {@render thumbnail({ asset, position, isInViewport })}
       {@render customThumbnailLayout?.(asset)}
     </div>
   {/each}
