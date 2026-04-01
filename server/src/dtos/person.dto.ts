@@ -40,11 +40,11 @@ const PeopleUpdateSchema = z
   })
   .meta({ id: 'PeopleUpdateDto' });
 
-const MergePersonSchema = z
+const MergeFaceClusterSchema = z
   .object({
-    ids: z.array(z.uuidv4()).describe('Person IDs to merge'),
+    ids: z.array(z.uuidv4()).describe('Face cluster IDs to merge'),
   })
-  .meta({ id: 'MergePersonDto' });
+  .meta({ id: 'MergeFaceClusterDto' });
 
 const PersonSearchSchema = z
   .object({
@@ -81,13 +81,14 @@ export const PersonResponseSchema = z
       .optional()
       .describe('Person color (hex)')
       .meta(new HistoryBuilder().added('v1.126.0').stable('v2').getExtensions()),
+    faceClusterId: z.string().nullable().describe('Face cluster ID'),
   })
   .meta({ id: 'PersonResponseDto' });
 
 export class PersonCreateDto extends createZodDto(PersonCreateSchema) {}
 export class PersonUpdateDto extends createZodDto(PersonUpdateSchema) {}
 export class PeopleUpdateDto extends createZodDto(PeopleUpdateSchema) {}
-export class MergePersonDto extends createZodDto(MergePersonSchema) {}
+export class MergeFaceClusterDto extends createZodDto(MergeFaceClusterSchema) {}
 export class PersonSearchDto extends createZodDto(PersonSearchSchema) {}
 export class PersonResponseDto extends createZodDto(PersonResponseSchema) {}
 
@@ -179,6 +180,7 @@ export function mapPerson(person: MaybeDehydrated<Person>): PersonResponseDto {
     isFavorite: person.isFavorite,
     color: person.color ?? undefined,
     updatedAt: asDateString(person.updatedAt),
+    faceClusterId: person.faceClusterId,
   };
 }
 
