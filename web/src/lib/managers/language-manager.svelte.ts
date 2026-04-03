@@ -19,7 +19,7 @@ class LanguageManager {
 
     this.rtl = item.rtl ?? false;
 
-    document.body.setAttribute('dir', item.rtl ? 'rtl' : 'ltr');
+    document.documentElement.setAttribute('dir', item.rtl ? 'rtl' : 'ltr');
 
     eventManager.emit('LanguageChange', item);
   }

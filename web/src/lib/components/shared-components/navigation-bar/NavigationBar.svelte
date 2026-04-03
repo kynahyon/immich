@@ -10,6 +10,7 @@
   import SkipLink from '$lib/elements/SkipLink.svelte';
   import { authManager } from '$lib/managers/auth-manager.svelte';
   import { featureFlagsManager } from '$lib/managers/feature-flags-manager.svelte';
+  import { viewTransitionManager } from '$lib/managers/ViewTransitionManager.svelte';
   import { Route } from '$lib/route';
   import { getGlobalActions } from '$lib/services/app.service';
   import { mediaQueryManager } from '$lib/stores/media-query-manager.svelte';
@@ -27,21 +28,35 @@
     onUploadClick?: () => void;
     // TODO: remove once this is only used in <AppShellHeader>
     noBorder?: boolean;
+    hidden?: boolean;
   };
 
-  let { onUploadClick, noBorder = false }: Props = $props();
+  let { onUploadClick, noBorder = false, hidden = false }: Props = $props();
 
+  let viewTransitionName = $state<string | undefined>();
   let shouldShowAccountInfoPanel = $state(false);
   let shouldShowNotificationPanel = $state(false);
   let innerWidth: number = $state(0);
   const hasUnreadNotifications = $derived(notificationManager.notifications.length > 0);
 
-  onMount(async () => {
-    try {
-      await notificationManager.refresh();
-    } catch (error) {
+  onMount(() => {
+    notificationManager.refresh().catch((error) => {
       console.error('Failed to load notifications on mount', error);
-    }
+    });
+
+    return viewTransitionManager.on({
+      PrepareOldSnapshot: (types) => {
+        if (types.includes('viewer')) {
+          viewTransitionName = 'exclude';
+        }
+      },
+      PrepareNewSnapshot: (types) => {
+        viewTransitionName = types.includes('timeline') ? 'exclude' : undefined;
+      },
+      Finished: () => {
+        viewTransitionName = undefined;
+      },
+    });
   });
 
   const { Cast } = $derived(getGlobalActions($t));
@@ -49,7 +64,11 @@
 
 <svelte:window bind:innerWidth />
 
-<nav id="dashboard-navbar" class="h-(--navbar-height) w-dvw text-sm max-md:h-(--navbar-height-md)">
+<nav
+  id="dashboard-navbar"
+  class={['h-(--navbar-height) w-dvw text-sm max-md:h-(--navbar-height-md)', hidden && 'invisible']}
+  style:view-transition-name={viewTransitionName}
+>
   <SkipLink text={$t('skip_to_content')} />
   <div
     class="grid h-full grid-cols-[--spacing(32)_auto] items-center py-2 sidebar:grid-cols-[--spacing(64)_auto] {noBorder

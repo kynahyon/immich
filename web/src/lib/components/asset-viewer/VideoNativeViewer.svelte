@@ -180,6 +180,8 @@
           playsinline
           {...useSwipe(onSwipe)}
           class="h-full object-contain"
+          style:view-transition-name={assetViewerManager.transitionName}
+          onloadedmetadata={() => assetViewerManager.emit('ViewerOpenTransitionReady')}
           oncanplay={(e) => handleCanPlay(e.currentTarget)}
           onended={onVideoEnded}
           onplaying={(e) => {

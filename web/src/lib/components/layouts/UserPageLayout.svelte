@@ -7,6 +7,8 @@
   import NavigationBar from '$lib/components/shared-components/navigation-bar/NavigationBar.svelte';
   import UserSidebar from '$lib/components/shared-components/side-bar/UserSidebar.svelte';
   import type { HeaderButtonActionItem } from '$lib/types';
+  import { page } from '$app/state';
+  import { isAssetViewerRoute } from '$lib/utils/navigation';
   import { openFileUploadDialog } from '$lib/utils/file-uploader';
   import { Button, ContextMenuButton, HStack, isMenuItemType, type MenuItemType } from '@immich/ui';
   import type { Snippet } from 'svelte';
@@ -48,7 +50,7 @@
 
 <header>
   {#if !hideNavbar}
-    <NavigationBar onUploadClick={() => openFileUploadDialog()} />
+    <NavigationBar hidden={isAssetViewerRoute(page)} onUploadClick={() => openFileUploadDialog()} />
   {/if}
 </header>
 <div
@@ -64,7 +66,7 @@
     <UserSidebar />
   {/if}
 
-  <main class="relative">
+  <main class="relative w-full">
     <div class="{scrollbarClass} absolute {hasTitleClass} w-full overflow-y-auto p-2" use:useActions={use}>
       {@render children?.()}
     </div>

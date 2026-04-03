@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { assetViewerManager } from '$lib/managers/asset-viewer-manager.svelte';
   import { ResizeBoundary, transformManager } from '$lib/managers/edit/transform-manager.svelte';
   import { getAssetMediaUrl } from '$lib/utils';
   import { getAltText } from '$lib/utils/thumbnail-util';
@@ -74,6 +75,8 @@
       alt={$getAltText(toTimelineAsset(asset))}
       class="h-full transition-transform select-none motion-reduce:transition-none"
       style:transform={imageTransform}
+      onload={() => assetViewerManager.emit('ViewerOpenTransitionReady')}
+      onerror={() => assetViewerManager.emit('ViewerOpenTransitionReady')}
     />
     <div
       class={[
