@@ -56,10 +56,13 @@ class _AssetPageState extends ConsumerState<AssetPage> {
   _DragIntent _dragIntent = _DragIntent.none;
   Drag? _drag;
 
+  BaseAsset? _asset;
+
   @override
   void initState() {
     super.initState();
     _eventSubscription = EventStream.shared.listen(_onEvent);
+    _asset = ref.read(timelineServiceProvider).getAssetSafe(widget.index);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted || !_scrollController.hasClients) return;
       _scrollController.snapPosition.snapOffset = _snapOffset;
@@ -67,6 +70,14 @@ class _AssetPageState extends ConsumerState<AssetPage> {
         _scrollController.jumpTo(_snapOffset);
       }
     });
+  }
+
+  @override
+  void didUpdateWidget(AssetPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.index != widget.index) {
+      _asset = ref.read(timelineServiceProvider).getAssetSafe(widget.index);
+    }
   }
 
   @override
@@ -357,7 +368,7 @@ class _AssetPageState extends ConsumerState<AssetPage> {
     final stackIndex = ref.watch(assetViewerProvider.select((s) => s.stackIndex));
     final isPlayingMotionVideo = ref.watch(isPlayingMotionVideoProvider);
 
-    final asset = ref.read(timelineServiceProvider).getAssetSafe(widget.index);
+    final asset = _asset;
     if (asset == null) {
       return const Center(child: ImmichLoadingIndicator());
     }
