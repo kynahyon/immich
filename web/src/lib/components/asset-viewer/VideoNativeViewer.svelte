@@ -140,9 +140,40 @@
   let containerHeight = $state(0);
 
   $effect(() => {
-    if (assetViewerManager.isFaceEditMode) {
-      videoPlayer?.pause();
+    if (!assetViewerManager.isFaceEditMode || !videoPlayer) {
+      return;
     }
+    videoPlayer.pause();
+
+    const { videoWidth, videoHeight } = videoPlayer;
+    if (videoWidth === 0 || videoHeight === 0) {
+      return;
+    }
+
+    const canvas = document.createElement('canvas');
+    canvas.width = videoWidth;
+    canvas.height = videoHeight;
+    const context = canvas.getContext('2d');
+    if (!context) {
+      return;
+    }
+
+    context.drawImage(videoPlayer, 0, 0);
+    const dataUrl = canvas.toDataURL('image/png');
+    canvas.width = 0;
+
+    const img = new Image();
+    const onLoad = () => {
+      assetViewerManager.imgRef = img;
+    };
+    img.addEventListener('load', onLoad);
+    img.src = dataUrl;
+
+    return () => {
+      img.removeEventListener('load', onLoad);
+      img.src = '';
+      assetViewerManager.imgRef = undefined;
+    };
   });
 </script>
 
@@ -248,7 +279,11 @@
       {/if}
 
       {#if assetViewerManager.isFaceEditMode}
-        <FaceEditor htmlElement={videoPlayer} {containerWidth} {containerHeight} {assetId} />
+        <FaceEditor
+          assetSize={{ width: asset.width ?? 0, height: asset.height ?? 0 }}
+          containerSize={{ width: containerWidth, height: containerHeight }}
+          {assetId}
+        />
       {/if}
     {/if}
   </div>
