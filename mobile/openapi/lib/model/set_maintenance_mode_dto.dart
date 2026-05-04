@@ -48,7 +48,7 @@ class SetMaintenanceModeDto {
     if (this.restoreBackupFilename != null) {
       json[r'restoreBackupFilename'] = this.restoreBackupFilename;
     } else {
-    //  json[r'restoreBackupFilename'] = null;
+      json[r'restoreBackupFilename'] = null;
     }
     return json;
   }
@@ -57,9 +57,17 @@ class SetMaintenanceModeDto {
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
   static SetMaintenanceModeDto? fromJson(dynamic value) {
-    upgradeDto(value, "SetMaintenanceModeDto");
     if (value is Map) {
       final json = value.cast<String, dynamic>();
+
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        assert(json.containsKey(r'action'), 'Required key "SetMaintenanceModeDto[action]" is missing from JSON.');
+        assert(json[r'action'] != null, 'Required key "SetMaintenanceModeDto[action]" has a null value in JSON.');
+        return true;
+      }());
 
       return SetMaintenanceModeDto(
         action: MaintenanceAction.fromJson(json[r'action'])!,

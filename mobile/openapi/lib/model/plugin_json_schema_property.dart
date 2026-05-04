@@ -94,30 +94,30 @@ class PluginJsonSchemaProperty {
     if (this.additionalProperties != null) {
       json[r'additionalProperties'] = this.additionalProperties;
     } else {
-    //  json[r'additionalProperties'] = null;
+      json[r'additionalProperties'] = null;
     }
     if (this.default_ != null) {
       json[r'default'] = this.default_;
     } else {
-    //  json[r'default'] = null;
+      json[r'default'] = null;
     }
     if (this.description != null) {
       json[r'description'] = this.description;
     } else {
-    //  json[r'description'] = null;
+      json[r'description'] = null;
     }
       json[r'enum'] = this.enum_;
     if (this.items != null) {
       json[r'items'] = this.items;
     } else {
-    //  json[r'items'] = null;
+      json[r'items'] = null;
     }
       json[r'properties'] = this.properties;
       json[r'required'] = this.required_;
     if (this.type != null) {
       json[r'type'] = this.type;
     } else {
-    //  json[r'type'] = null;
+      json[r'type'] = null;
     }
     return json;
   }
@@ -126,9 +126,15 @@ class PluginJsonSchemaProperty {
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
   static PluginJsonSchemaProperty? fromJson(dynamic value) {
-    upgradeDto(value, "PluginJsonSchemaProperty");
     if (value is Map) {
       final json = value.cast<String, dynamic>();
+
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        return true;
+      }());
 
       return PluginJsonSchemaProperty(
         additionalProperties: PluginJsonSchemaPropertyAdditionalProperties.fromJson(json[r'additionalProperties']),

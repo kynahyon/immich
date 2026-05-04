@@ -101,37 +101,37 @@ class SharedLinkCreateDto {
     if (this.albumId != null) {
       json[r'albumId'] = this.albumId;
     } else {
-    //  json[r'albumId'] = null;
+      json[r'albumId'] = null;
     }
       json[r'allowDownload'] = this.allowDownload;
     if (this.allowUpload != null) {
       json[r'allowUpload'] = this.allowUpload;
     } else {
-    //  json[r'allowUpload'] = null;
+      json[r'allowUpload'] = null;
     }
       json[r'assetIds'] = this.assetIds;
     if (this.description != null) {
       json[r'description'] = this.description;
     } else {
-    //  json[r'description'] = null;
+      json[r'description'] = null;
     }
     if (this.expiresAt != null) {
       json[r'expiresAt'] = _isEpochMarker(r'/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$/')
         ? this.expiresAt!.millisecondsSinceEpoch
         : this.expiresAt!.toUtc().toIso8601String();
     } else {
-    //  json[r'expiresAt'] = null;
+      json[r'expiresAt'] = null;
     }
     if (this.password != null) {
       json[r'password'] = this.password;
     } else {
-    //  json[r'password'] = null;
+      json[r'password'] = null;
     }
       json[r'showMetadata'] = this.showMetadata;
     if (this.slug != null) {
       json[r'slug'] = this.slug;
     } else {
-    //  json[r'slug'] = null;
+      json[r'slug'] = null;
     }
       json[r'type'] = this.type;
     return json;
@@ -141,9 +141,17 @@ class SharedLinkCreateDto {
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
   static SharedLinkCreateDto? fromJson(dynamic value) {
-    upgradeDto(value, "SharedLinkCreateDto");
     if (value is Map) {
       final json = value.cast<String, dynamic>();
+
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        assert(json.containsKey(r'type'), 'Required key "SharedLinkCreateDto[type]" is missing from JSON.');
+        assert(json[r'type'] != null, 'Required key "SharedLinkCreateDto[type]" has a null value in JSON.');
+        return true;
+      }());
 
       return SharedLinkCreateDto(
         albumId: mapValueOfType<String>(json, r'albumId'),

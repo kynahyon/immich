@@ -104,12 +104,12 @@ class MemoryCreateDto {
         ? this.hideAt!.millisecondsSinceEpoch
         : this.hideAt!.toUtc().toIso8601String();
     } else {
-    //  json[r'hideAt'] = null;
+      json[r'hideAt'] = null;
     }
     if (this.isSaved != null) {
       json[r'isSaved'] = this.isSaved;
     } else {
-    //  json[r'isSaved'] = null;
+      json[r'isSaved'] = null;
     }
       json[r'memoryAt'] = _isEpochMarker(r'/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$/')
         ? this.memoryAt.millisecondsSinceEpoch
@@ -119,14 +119,14 @@ class MemoryCreateDto {
         ? this.seenAt!.millisecondsSinceEpoch
         : this.seenAt!.toUtc().toIso8601String();
     } else {
-    //  json[r'seenAt'] = null;
+      json[r'seenAt'] = null;
     }
     if (this.showAt != null) {
       json[r'showAt'] = _isEpochMarker(r'/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$/')
         ? this.showAt!.millisecondsSinceEpoch
         : this.showAt!.toUtc().toIso8601String();
     } else {
-    //  json[r'showAt'] = null;
+      json[r'showAt'] = null;
     }
       json[r'type'] = this.type;
     return json;
@@ -136,9 +136,21 @@ class MemoryCreateDto {
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
   static MemoryCreateDto? fromJson(dynamic value) {
-    upgradeDto(value, "MemoryCreateDto");
     if (value is Map) {
       final json = value.cast<String, dynamic>();
+
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        assert(json.containsKey(r'data'), 'Required key "MemoryCreateDto[data]" is missing from JSON.');
+        assert(json[r'data'] != null, 'Required key "MemoryCreateDto[data]" has a null value in JSON.');
+        assert(json.containsKey(r'memoryAt'), 'Required key "MemoryCreateDto[memoryAt]" is missing from JSON.');
+        assert(json[r'memoryAt'] != null, 'Required key "MemoryCreateDto[memoryAt]" has a null value in JSON.');
+        assert(json.containsKey(r'type'), 'Required key "MemoryCreateDto[type]" is missing from JSON.');
+        assert(json[r'type'] != null, 'Required key "MemoryCreateDto[type]" has a null value in JSON.');
+        return true;
+      }());
 
       return MemoryCreateDto(
         assetIds: json[r'assetIds'] is Iterable

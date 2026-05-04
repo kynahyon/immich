@@ -92,7 +92,7 @@ class SyncAlbumV1 {
     if (this.thumbnailAssetId != null) {
       json[r'thumbnailAssetId'] = this.thumbnailAssetId;
     } else {
-    //  json[r'thumbnailAssetId'] = null;
+      json[r'thumbnailAssetId'] = null;
     }
       json[r'updatedAt'] = _isEpochMarker(r'/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$/')
         ? this.updatedAt.millisecondsSinceEpoch
@@ -104,9 +104,32 @@ class SyncAlbumV1 {
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
   static SyncAlbumV1? fromJson(dynamic value) {
-    upgradeDto(value, "SyncAlbumV1");
     if (value is Map) {
       final json = value.cast<String, dynamic>();
+
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        assert(json.containsKey(r'createdAt'), 'Required key "SyncAlbumV1[createdAt]" is missing from JSON.');
+        assert(json[r'createdAt'] != null, 'Required key "SyncAlbumV1[createdAt]" has a null value in JSON.');
+        assert(json.containsKey(r'description'), 'Required key "SyncAlbumV1[description]" is missing from JSON.');
+        assert(json[r'description'] != null, 'Required key "SyncAlbumV1[description]" has a null value in JSON.');
+        assert(json.containsKey(r'id'), 'Required key "SyncAlbumV1[id]" is missing from JSON.');
+        assert(json[r'id'] != null, 'Required key "SyncAlbumV1[id]" has a null value in JSON.');
+        assert(json.containsKey(r'isActivityEnabled'), 'Required key "SyncAlbumV1[isActivityEnabled]" is missing from JSON.');
+        assert(json[r'isActivityEnabled'] != null, 'Required key "SyncAlbumV1[isActivityEnabled]" has a null value in JSON.');
+        assert(json.containsKey(r'name'), 'Required key "SyncAlbumV1[name]" is missing from JSON.');
+        assert(json[r'name'] != null, 'Required key "SyncAlbumV1[name]" has a null value in JSON.');
+        assert(json.containsKey(r'order'), 'Required key "SyncAlbumV1[order]" is missing from JSON.');
+        assert(json[r'order'] != null, 'Required key "SyncAlbumV1[order]" has a null value in JSON.');
+        assert(json.containsKey(r'ownerId'), 'Required key "SyncAlbumV1[ownerId]" is missing from JSON.');
+        assert(json[r'ownerId'] != null, 'Required key "SyncAlbumV1[ownerId]" has a null value in JSON.');
+        assert(json.containsKey(r'thumbnailAssetId'), 'Required key "SyncAlbumV1[thumbnailAssetId]" is missing from JSON.');
+        assert(json.containsKey(r'updatedAt'), 'Required key "SyncAlbumV1[updatedAt]" is missing from JSON.');
+        assert(json[r'updatedAt'] != null, 'Required key "SyncAlbumV1[updatedAt]" has a null value in JSON.');
+        return true;
+      }());
 
       return SyncAlbumV1(
         createdAt: mapDateTime(json, r'createdAt', r'/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$/')!,

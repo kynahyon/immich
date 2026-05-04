@@ -98,7 +98,7 @@ class LibraryResponseDto {
         ? this.refreshedAt!.millisecondsSinceEpoch
         : this.refreshedAt!.toUtc().toIso8601String();
     } else {
-    //  json[r'refreshedAt'] = null;
+      json[r'refreshedAt'] = null;
     }
       json[r'updatedAt'] = _isEpochMarker(r'/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$/')
         ? this.updatedAt.millisecondsSinceEpoch
@@ -110,9 +110,32 @@ class LibraryResponseDto {
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
   static LibraryResponseDto? fromJson(dynamic value) {
-    upgradeDto(value, "LibraryResponseDto");
     if (value is Map) {
       final json = value.cast<String, dynamic>();
+
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        assert(json.containsKey(r'assetCount'), 'Required key "LibraryResponseDto[assetCount]" is missing from JSON.');
+        assert(json[r'assetCount'] != null, 'Required key "LibraryResponseDto[assetCount]" has a null value in JSON.');
+        assert(json.containsKey(r'createdAt'), 'Required key "LibraryResponseDto[createdAt]" is missing from JSON.');
+        assert(json[r'createdAt'] != null, 'Required key "LibraryResponseDto[createdAt]" has a null value in JSON.');
+        assert(json.containsKey(r'exclusionPatterns'), 'Required key "LibraryResponseDto[exclusionPatterns]" is missing from JSON.');
+        assert(json[r'exclusionPatterns'] != null, 'Required key "LibraryResponseDto[exclusionPatterns]" has a null value in JSON.');
+        assert(json.containsKey(r'id'), 'Required key "LibraryResponseDto[id]" is missing from JSON.');
+        assert(json[r'id'] != null, 'Required key "LibraryResponseDto[id]" has a null value in JSON.');
+        assert(json.containsKey(r'importPaths'), 'Required key "LibraryResponseDto[importPaths]" is missing from JSON.');
+        assert(json[r'importPaths'] != null, 'Required key "LibraryResponseDto[importPaths]" has a null value in JSON.');
+        assert(json.containsKey(r'name'), 'Required key "LibraryResponseDto[name]" is missing from JSON.');
+        assert(json[r'name'] != null, 'Required key "LibraryResponseDto[name]" has a null value in JSON.');
+        assert(json.containsKey(r'ownerId'), 'Required key "LibraryResponseDto[ownerId]" is missing from JSON.');
+        assert(json[r'ownerId'] != null, 'Required key "LibraryResponseDto[ownerId]" has a null value in JSON.');
+        assert(json.containsKey(r'refreshedAt'), 'Required key "LibraryResponseDto[refreshedAt]" is missing from JSON.');
+        assert(json.containsKey(r'updatedAt'), 'Required key "LibraryResponseDto[updatedAt]" is missing from JSON.');
+        assert(json[r'updatedAt'] != null, 'Required key "LibraryResponseDto[updatedAt]" has a null value in JSON.');
+        return true;
+      }());
 
       return LibraryResponseDto(
         assetCount: mapValueOfType<int>(json, r'assetCount')!,

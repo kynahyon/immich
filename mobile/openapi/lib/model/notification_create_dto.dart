@@ -83,25 +83,25 @@ class NotificationCreateDto {
     if (this.description != null) {
       json[r'description'] = this.description;
     } else {
-    //  json[r'description'] = null;
+      json[r'description'] = null;
     }
     if (this.level != null) {
       json[r'level'] = this.level;
     } else {
-    //  json[r'level'] = null;
+      json[r'level'] = null;
     }
     if (this.readAt != null) {
       json[r'readAt'] = _isEpochMarker(r'/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$/')
         ? this.readAt!.millisecondsSinceEpoch
         : this.readAt!.toUtc().toIso8601String();
     } else {
-    //  json[r'readAt'] = null;
+      json[r'readAt'] = null;
     }
       json[r'title'] = this.title;
     if (this.type != null) {
       json[r'type'] = this.type;
     } else {
-    //  json[r'type'] = null;
+      json[r'type'] = null;
     }
       json[r'userId'] = this.userId;
     return json;
@@ -111,9 +111,19 @@ class NotificationCreateDto {
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
   static NotificationCreateDto? fromJson(dynamic value) {
-    upgradeDto(value, "NotificationCreateDto");
     if (value is Map) {
       final json = value.cast<String, dynamic>();
+
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        assert(json.containsKey(r'title'), 'Required key "NotificationCreateDto[title]" is missing from JSON.');
+        assert(json[r'title'] != null, 'Required key "NotificationCreateDto[title]" has a null value in JSON.');
+        assert(json.containsKey(r'userId'), 'Required key "NotificationCreateDto[userId]" is missing from JSON.');
+        assert(json[r'userId'] != null, 'Required key "NotificationCreateDto[userId]" has a null value in JSON.');
+        return true;
+      }());
 
       return NotificationCreateDto(
         data: mapCastOfType<String, Object>(json, r'data') ?? const {},

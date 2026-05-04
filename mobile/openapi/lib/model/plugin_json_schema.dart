@@ -73,19 +73,19 @@ class PluginJsonSchema {
     if (this.additionalProperties != null) {
       json[r'additionalProperties'] = this.additionalProperties;
     } else {
-    //  json[r'additionalProperties'] = null;
+      json[r'additionalProperties'] = null;
     }
     if (this.description != null) {
       json[r'description'] = this.description;
     } else {
-    //  json[r'description'] = null;
+      json[r'description'] = null;
     }
       json[r'properties'] = this.properties;
       json[r'required'] = this.required_;
     if (this.type != null) {
       json[r'type'] = this.type;
     } else {
-    //  json[r'type'] = null;
+      json[r'type'] = null;
     }
     return json;
   }
@@ -94,9 +94,15 @@ class PluginJsonSchema {
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
   static PluginJsonSchema? fromJson(dynamic value) {
-    upgradeDto(value, "PluginJsonSchema");
     if (value is Map) {
       final json = value.cast<String, dynamic>();
+
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        return true;
+      }());
 
       return PluginJsonSchema(
         additionalProperties: mapValueOfType<bool>(json, r'additionalProperties'),

@@ -154,31 +154,31 @@ class SyncAssetV2 {
         ? this.deletedAt!.millisecondsSinceEpoch
         : this.deletedAt!.toUtc().toIso8601String();
     } else {
-    //  json[r'deletedAt'] = null;
+      json[r'deletedAt'] = null;
     }
     if (this.duration != null) {
       json[r'duration'] = this.duration;
     } else {
-    //  json[r'duration'] = null;
+      json[r'duration'] = null;
     }
     if (this.fileCreatedAt != null) {
       json[r'fileCreatedAt'] = _isEpochMarker(r'/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$/')
         ? this.fileCreatedAt!.millisecondsSinceEpoch
         : this.fileCreatedAt!.toUtc().toIso8601String();
     } else {
-    //  json[r'fileCreatedAt'] = null;
+      json[r'fileCreatedAt'] = null;
     }
     if (this.fileModifiedAt != null) {
       json[r'fileModifiedAt'] = _isEpochMarker(r'/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$/')
         ? this.fileModifiedAt!.millisecondsSinceEpoch
         : this.fileModifiedAt!.toUtc().toIso8601String();
     } else {
-    //  json[r'fileModifiedAt'] = null;
+      json[r'fileModifiedAt'] = null;
     }
     if (this.height != null) {
       json[r'height'] = this.height;
     } else {
-    //  json[r'height'] = null;
+      json[r'height'] = null;
     }
       json[r'id'] = this.id;
       json[r'isEdited'] = this.isEdited;
@@ -186,38 +186,38 @@ class SyncAssetV2 {
     if (this.libraryId != null) {
       json[r'libraryId'] = this.libraryId;
     } else {
-    //  json[r'libraryId'] = null;
+      json[r'libraryId'] = null;
     }
     if (this.livePhotoVideoId != null) {
       json[r'livePhotoVideoId'] = this.livePhotoVideoId;
     } else {
-    //  json[r'livePhotoVideoId'] = null;
+      json[r'livePhotoVideoId'] = null;
     }
     if (this.localDateTime != null) {
       json[r'localDateTime'] = _isEpochMarker(r'/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$/')
         ? this.localDateTime!.millisecondsSinceEpoch
         : this.localDateTime!.toUtc().toIso8601String();
     } else {
-    //  json[r'localDateTime'] = null;
+      json[r'localDateTime'] = null;
     }
       json[r'originalFileName'] = this.originalFileName;
       json[r'ownerId'] = this.ownerId;
     if (this.stackId != null) {
       json[r'stackId'] = this.stackId;
     } else {
-    //  json[r'stackId'] = null;
+      json[r'stackId'] = null;
     }
     if (this.thumbhash != null) {
       json[r'thumbhash'] = this.thumbhash;
     } else {
-    //  json[r'thumbhash'] = null;
+      json[r'thumbhash'] = null;
     }
       json[r'type'] = this.type;
       json[r'visibility'] = this.visibility;
     if (this.width != null) {
       json[r'width'] = this.width;
     } else {
-    //  json[r'width'] = null;
+      json[r'width'] = null;
     }
     return json;
   }
@@ -226,9 +226,42 @@ class SyncAssetV2 {
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
   static SyncAssetV2? fromJson(dynamic value) {
-    upgradeDto(value, "SyncAssetV2");
     if (value is Map) {
       final json = value.cast<String, dynamic>();
+
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        assert(json.containsKey(r'checksum'), 'Required key "SyncAssetV2[checksum]" is missing from JSON.');
+        assert(json[r'checksum'] != null, 'Required key "SyncAssetV2[checksum]" has a null value in JSON.');
+        assert(json.containsKey(r'deletedAt'), 'Required key "SyncAssetV2[deletedAt]" is missing from JSON.');
+        assert(json.containsKey(r'duration'), 'Required key "SyncAssetV2[duration]" is missing from JSON.');
+        assert(json.containsKey(r'fileCreatedAt'), 'Required key "SyncAssetV2[fileCreatedAt]" is missing from JSON.');
+        assert(json.containsKey(r'fileModifiedAt'), 'Required key "SyncAssetV2[fileModifiedAt]" is missing from JSON.');
+        assert(json.containsKey(r'height'), 'Required key "SyncAssetV2[height]" is missing from JSON.');
+        assert(json.containsKey(r'id'), 'Required key "SyncAssetV2[id]" is missing from JSON.');
+        assert(json[r'id'] != null, 'Required key "SyncAssetV2[id]" has a null value in JSON.');
+        assert(json.containsKey(r'isEdited'), 'Required key "SyncAssetV2[isEdited]" is missing from JSON.');
+        assert(json[r'isEdited'] != null, 'Required key "SyncAssetV2[isEdited]" has a null value in JSON.');
+        assert(json.containsKey(r'isFavorite'), 'Required key "SyncAssetV2[isFavorite]" is missing from JSON.');
+        assert(json[r'isFavorite'] != null, 'Required key "SyncAssetV2[isFavorite]" has a null value in JSON.');
+        assert(json.containsKey(r'libraryId'), 'Required key "SyncAssetV2[libraryId]" is missing from JSON.');
+        assert(json.containsKey(r'livePhotoVideoId'), 'Required key "SyncAssetV2[livePhotoVideoId]" is missing from JSON.');
+        assert(json.containsKey(r'localDateTime'), 'Required key "SyncAssetV2[localDateTime]" is missing from JSON.');
+        assert(json.containsKey(r'originalFileName'), 'Required key "SyncAssetV2[originalFileName]" is missing from JSON.');
+        assert(json[r'originalFileName'] != null, 'Required key "SyncAssetV2[originalFileName]" has a null value in JSON.');
+        assert(json.containsKey(r'ownerId'), 'Required key "SyncAssetV2[ownerId]" is missing from JSON.');
+        assert(json[r'ownerId'] != null, 'Required key "SyncAssetV2[ownerId]" has a null value in JSON.');
+        assert(json.containsKey(r'stackId'), 'Required key "SyncAssetV2[stackId]" is missing from JSON.');
+        assert(json.containsKey(r'thumbhash'), 'Required key "SyncAssetV2[thumbhash]" is missing from JSON.');
+        assert(json.containsKey(r'type'), 'Required key "SyncAssetV2[type]" is missing from JSON.');
+        assert(json[r'type'] != null, 'Required key "SyncAssetV2[type]" has a null value in JSON.');
+        assert(json.containsKey(r'visibility'), 'Required key "SyncAssetV2[visibility]" is missing from JSON.');
+        assert(json[r'visibility'] != null, 'Required key "SyncAssetV2[visibility]" has a null value in JSON.');
+        assert(json.containsKey(r'width'), 'Required key "SyncAssetV2[width]" is missing from JSON.');
+        return true;
+      }());
 
       return SyncAssetV2(
         checksum: mapValueOfType<String>(json, r'checksum')!,

@@ -136,14 +136,14 @@ class MemoryResponseDto {
         ? this.deletedAt!.millisecondsSinceEpoch
         : this.deletedAt!.toUtc().toIso8601String();
     } else {
-    //  json[r'deletedAt'] = null;
+      json[r'deletedAt'] = null;
     }
     if (this.hideAt != null) {
       json[r'hideAt'] = _isEpochMarker(r'/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$/')
         ? this.hideAt!.millisecondsSinceEpoch
         : this.hideAt!.toUtc().toIso8601String();
     } else {
-    //  json[r'hideAt'] = null;
+      json[r'hideAt'] = null;
     }
       json[r'id'] = this.id;
       json[r'isSaved'] = this.isSaved;
@@ -156,14 +156,14 @@ class MemoryResponseDto {
         ? this.seenAt!.millisecondsSinceEpoch
         : this.seenAt!.toUtc().toIso8601String();
     } else {
-    //  json[r'seenAt'] = null;
+      json[r'seenAt'] = null;
     }
     if (this.showAt != null) {
       json[r'showAt'] = _isEpochMarker(r'/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$/')
         ? this.showAt!.millisecondsSinceEpoch
         : this.showAt!.toUtc().toIso8601String();
     } else {
-    //  json[r'showAt'] = null;
+      json[r'showAt'] = null;
     }
       json[r'type'] = this.type;
       json[r'updatedAt'] = _isEpochMarker(r'/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$/')
@@ -176,9 +176,33 @@ class MemoryResponseDto {
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
   static MemoryResponseDto? fromJson(dynamic value) {
-    upgradeDto(value, "MemoryResponseDto");
     if (value is Map) {
       final json = value.cast<String, dynamic>();
+
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        assert(json.containsKey(r'assets'), 'Required key "MemoryResponseDto[assets]" is missing from JSON.');
+        assert(json[r'assets'] != null, 'Required key "MemoryResponseDto[assets]" has a null value in JSON.');
+        assert(json.containsKey(r'createdAt'), 'Required key "MemoryResponseDto[createdAt]" is missing from JSON.');
+        assert(json[r'createdAt'] != null, 'Required key "MemoryResponseDto[createdAt]" has a null value in JSON.');
+        assert(json.containsKey(r'data'), 'Required key "MemoryResponseDto[data]" is missing from JSON.');
+        assert(json[r'data'] != null, 'Required key "MemoryResponseDto[data]" has a null value in JSON.');
+        assert(json.containsKey(r'id'), 'Required key "MemoryResponseDto[id]" is missing from JSON.');
+        assert(json[r'id'] != null, 'Required key "MemoryResponseDto[id]" has a null value in JSON.');
+        assert(json.containsKey(r'isSaved'), 'Required key "MemoryResponseDto[isSaved]" is missing from JSON.');
+        assert(json[r'isSaved'] != null, 'Required key "MemoryResponseDto[isSaved]" has a null value in JSON.');
+        assert(json.containsKey(r'memoryAt'), 'Required key "MemoryResponseDto[memoryAt]" is missing from JSON.');
+        assert(json[r'memoryAt'] != null, 'Required key "MemoryResponseDto[memoryAt]" has a null value in JSON.');
+        assert(json.containsKey(r'ownerId'), 'Required key "MemoryResponseDto[ownerId]" is missing from JSON.');
+        assert(json[r'ownerId'] != null, 'Required key "MemoryResponseDto[ownerId]" has a null value in JSON.');
+        assert(json.containsKey(r'type'), 'Required key "MemoryResponseDto[type]" is missing from JSON.');
+        assert(json[r'type'] != null, 'Required key "MemoryResponseDto[type]" has a null value in JSON.');
+        assert(json.containsKey(r'updatedAt'), 'Required key "MemoryResponseDto[updatedAt]" is missing from JSON.');
+        assert(json[r'updatedAt'] != null, 'Required key "MemoryResponseDto[updatedAt]" has a null value in JSON.');
+        return true;
+      }());
 
       return MemoryResponseDto(
         assets: AssetResponseDto.listFromJson(json[r'assets']),

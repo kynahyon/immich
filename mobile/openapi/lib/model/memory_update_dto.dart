@@ -66,21 +66,21 @@ class MemoryUpdateDto {
     if (this.isSaved != null) {
       json[r'isSaved'] = this.isSaved;
     } else {
-    //  json[r'isSaved'] = null;
+      json[r'isSaved'] = null;
     }
     if (this.memoryAt != null) {
       json[r'memoryAt'] = _isEpochMarker(r'/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$/')
         ? this.memoryAt!.millisecondsSinceEpoch
         : this.memoryAt!.toUtc().toIso8601String();
     } else {
-    //  json[r'memoryAt'] = null;
+      json[r'memoryAt'] = null;
     }
     if (this.seenAt != null) {
       json[r'seenAt'] = _isEpochMarker(r'/^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$/')
         ? this.seenAt!.millisecondsSinceEpoch
         : this.seenAt!.toUtc().toIso8601String();
     } else {
-    //  json[r'seenAt'] = null;
+      json[r'seenAt'] = null;
     }
     return json;
   }
@@ -89,9 +89,15 @@ class MemoryUpdateDto {
   /// [value] if it's a [Map], null otherwise.
   // ignore: prefer_constructors_over_static_methods
   static MemoryUpdateDto? fromJson(dynamic value) {
-    upgradeDto(value, "MemoryUpdateDto");
     if (value is Map) {
       final json = value.cast<String, dynamic>();
+
+      // Ensure that the map contains the required keys.
+      // Note 1: the values aren't checked for validity beyond being non-null.
+      // Note 2: this code is stripped in release mode!
+      assert(() {
+        return true;
+      }());
 
       return MemoryUpdateDto(
         isSaved: mapValueOfType<bool>(json, r'isSaved'),
