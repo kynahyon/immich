@@ -119,10 +119,11 @@ export class HlsService extends BaseService {
   private generateMainPlaylist(sessionId: string, ffmpeg: SystemConfigFFmpegDto, asset: AssetWithStreamInfo) {
     const fps = ((asset.packets.packetCount * asset.videoStream.timeBase) / asset.packets.totalDuration).toFixed(3);
     const sourceResolution = Math.min(asset.videoStream.height, asset.videoStream.width);
+    const targetResolution = Math.max(sourceResolution, HLS_VARIANTS[0].resolution);
     const lines = ['#EXTM3U', `#EXT-X-VERSION:${HLS_VERSION}`];
     for (let i = 0; i < HLS_VARIANTS.length; i++) {
       const { resolution, bitrate, codec, codecString } = HLS_VARIANTS[i];
-      if (resolution > sourceResolution || !SUPPORTED_HWA_CODECS[ffmpeg.accel].includes(codec)) {
+      if (resolution > targetResolution || !SUPPORTED_HWA_CODECS[ffmpeg.accel].includes(codec)) {
         continue;
       }
       const { width, height } = getOutputSize(asset.videoStream, resolution);
