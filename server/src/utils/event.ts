@@ -2,8 +2,11 @@ import { ArgOf, EmitEvent } from 'src/repositories/event.repository';
 
 export class PendingEvents<T extends { [T in EmitEvent]: ArgOf<T> extends { error?: string } ? T : never }[EmitEvent]> {
   private pending = new Map<string, { completers: PromiseWithResolvers<ArgOf<T>>[]; timeout: NodeJS.Timeout }>();
+  private timeoutMs: number;
 
-  constructor(private timeoutMs: number) {}
+  constructor({ timeoutMs }: { timeoutMs: number }) {
+    this.timeoutMs = timeoutMs;
+  }
 
   wait(key: string): Promise<ArgOf<T>> {
     const completer = Promise.withResolvers<ArgOf<T>>();

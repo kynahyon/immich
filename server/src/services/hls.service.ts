@@ -24,8 +24,8 @@ type AssetWithStreamInfo = { videoStream: VideoStreamInfo & { timeBase: number }
 
 @Injectable()
 export class HlsService extends BaseService {
-  private pendingSegments = new PendingEvents<'HlsSegmentResult'>(15_000);
-  private pendingSessions = new PendingEvents<'HlsSessionResult'>(5000);
+  private pendingSegments = new PendingEvents<'HlsSegmentResult'>({ timeoutMs: 15_000 });
+  private pendingSessions = new PendingEvents<'HlsSessionResult'>({ timeoutMs: 5000 });
   private sessions = new Map<string, { lastRequestedSegment: number | null }>();
 
   @OnEvent({ name: 'HlsSessionResult', server: true, workers: [ImmichWorker.Api] })
@@ -60,6 +60,8 @@ export class HlsService extends BaseService {
       throw new NotFoundException('Asset is not yet ready for streaming');
     }
 
+    // Sharing the sessionId allows only one microservices worker to successfully insert to the session table.
+    // The microservices worker that creates a session owns the transcoding lifecycle for it.
     const sessionId = this.cryptoRepository.randomUUID();
     this.websocketRepository.serverSend('HlsSessionRequest', { sessionId, assetId, ownerId: auth.user.id });
     await this.pendingSessions.wait(sessionId);

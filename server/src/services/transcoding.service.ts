@@ -81,6 +81,7 @@ export class TranscodingService extends BaseService {
       this.cleanupInterval ??= setInterval(() => void this.removeInactiveSessions(), HLS_CLEANUP_INTERVAL_MS);
       this.websocketRepository.serverSend('HlsSessionResult', { sessionId });
     } catch (error) {
+      // If insertion failed due to a PK constraint, another worker has already created a session for this ID.
       if (!isVideoStreamSessionPkConstraint(error)) {
         this.logger.error(`Failed to create HLS session ${sessionId}: ${error}`);
         this.websocketRepository.serverSend('HlsSessionResult', { sessionId, error: 'Failed to create HLS session' });
