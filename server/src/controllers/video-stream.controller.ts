@@ -20,18 +20,18 @@ export class VideoStreamController {
     private service: HlsService,
   ) {}
 
-  @Get(':id/video/stream/master.m3u8')
+  @Get(':id/video/stream/main.m3u8')
   @Authenticated({ permission: Permission.AssetView, sharedLink: true })
   @Header('Cache-Control', 'no-cache')
   @Header('Content-Type', PLAYLIST_CONTENT_TYPE)
   @ApiProduces(PLAYLIST_CONTENT_TYPE)
   @Endpoint({
-    summary: 'Get HLS master playlist',
-    description: 'Returns an HLS master playlist with all available variants for the asset.',
+    summary: 'Get HLS main playlist',
+    description: 'Returns an HLS main playlist with all available variants for the asset.',
     history: new HistoryBuilder().added('v3').alpha('v3'),
   })
-  getMasterPlaylist(@Auth() auth: AuthDto, @Param() { id }: UUIDParamDto) {
-    return this.service.getMasterPlaylist(auth, id);
+  getMainPlaylist(@Auth() auth: AuthDto, @Param() { id }: UUIDParamDto) {
+    return this.service.getMainPlaylist(auth, id);
   }
 
   @Get(':id/video/stream/:sessionId/:variantIndex/playlist.m3u8')

@@ -110,7 +110,7 @@ Class | Method | HTTP request | Description
 *AssetsApi* | [**getAssetMetadataByKey**](doc//AssetsApi.md#getassetmetadatabykey) | **GET** /assets/{id}/metadata/{key} | Retrieve asset metadata by key
 *AssetsApi* | [**getAssetOcr**](doc//AssetsApi.md#getassetocr) | **GET** /assets/{id}/ocr | Retrieve asset OCR data
 *AssetsApi* | [**getAssetStatistics**](doc//AssetsApi.md#getassetstatistics) | **GET** /assets/statistics | Get asset statistics
-*AssetsApi* | [**getMasterPlaylist**](doc//AssetsApi.md#getmasterplaylist) | **GET** /assets/{id}/video/stream/master.m3u8 | Get HLS master playlist
+*AssetsApi* | [**getMainPlaylist**](doc//AssetsApi.md#getmainplaylist) | **GET** /assets/{id}/video/stream/main.m3u8 | Get HLS main playlist
 *AssetsApi* | [**getMediaPlaylist**](doc//AssetsApi.md#getmediaplaylist) | **GET** /assets/{id}/video/stream/{sessionId}/{variantIndex}/playlist.m3u8 | Get HLS media playlist
 *AssetsApi* | [**getSegment**](doc//AssetsApi.md#getsegment) | **GET** /assets/{id}/video/stream/{sessionId}/{variantIndex}/{filename} | Get HLS segment or init file
 *AssetsApi* | [**playAssetVideo**](doc//AssetsApi.md#playassetvideo) | **GET** /assets/{id}/video/playback | Play asset video

@@ -72,7 +72,7 @@ export class VideoStreamRepository {
   }
 
   @GenerateSql({ params: [DummyValue.UUID] })
-  async getForMasterPlaylist(id: string) {
+  async getForMainPlaylist(id: string) {
     return this.db
       .selectFrom('asset')
       .innerJoin('asset_exif', 'asset.id', 'asset_exif.assetId')

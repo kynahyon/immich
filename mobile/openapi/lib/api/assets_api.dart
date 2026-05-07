@@ -878,9 +878,9 @@ class AssetsApi {
     return null;
   }
 
-  /// Get HLS master playlist
+  /// Get HLS main playlist
   ///
-  /// Returns an HLS master playlist with all available variants for the asset.
+  /// Returns an HLS main playlist with all available variants for the asset.
   ///
   /// Note: This method returns the HTTP [Response].
   ///
@@ -891,9 +891,9 @@ class AssetsApi {
   /// * [String] key:
   ///
   /// * [String] slug:
-  Future<Response> getMasterPlaylistWithHttpInfo(String id, { String? key, String? slug, }) async {
+  Future<Response> getMainPlaylistWithHttpInfo(String id, { String? key, String? slug, }) async {
     // ignore: prefer_const_declarations
-    final apiPath = r'/assets/{id}/video/stream/master.m3u8'
+    final apiPath = r'/assets/{id}/video/stream/main.m3u8'
       .replaceAll('{id}', id);
 
     // ignore: prefer_final_locals
@@ -924,9 +924,9 @@ class AssetsApi {
     );
   }
 
-  /// Get HLS master playlist
+  /// Get HLS main playlist
   ///
-  /// Returns an HLS master playlist with all available variants for the asset.
+  /// Returns an HLS main playlist with all available variants for the asset.
   ///
   /// Parameters:
   ///
@@ -935,8 +935,8 @@ class AssetsApi {
   /// * [String] key:
   ///
   /// * [String] slug:
-  Future<String?> getMasterPlaylist(String id, { String? key, String? slug, }) async {
-    final response = await getMasterPlaylistWithHttpInfo(id,  key: key, slug: slug, );
+  Future<String?> getMainPlaylist(String id, { String? key, String? slug, }) async {
+    final response = await getMainPlaylistWithHttpInfo(id,  key: key, slug: slug, );
     if (response.statusCode >= HttpStatus.badRequest) {
       throw ApiException(response.statusCode, await _decodeBodyBytes(response));
     }

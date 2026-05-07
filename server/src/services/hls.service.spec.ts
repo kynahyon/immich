@@ -167,14 +167,14 @@ describe(HlsService.name, () => {
     ({ sut, mocks } = newTestService(HlsService));
   });
 
-  describe('getMasterPlaylist', () => {
+  describe('getMainPlaylist', () => {
     const auth = factory.auth();
     const assetId = 'asset-1';
 
     const setup = (asset: typeof eiffelTower | typeof waterfall, accel: TranscodeHardwareAcceleration) => {
       mocks.access.asset.checkOwnerAccess.mockResolvedValue(new Set([assetId]));
       mocks.systemMetadata.get.mockResolvedValue({ ffmpeg: { realtime: { enabled: true }, accel } });
-      mocks.videoStream.getForMasterPlaylist.mockResolvedValue(asset);
+      mocks.videoStream.getForMainPlaylist.mockResolvedValue(asset);
       mocks.crypto.randomUUID.mockReturnValue(sessionId);
       mocks.websocket.serverSend.mockImplementation((event, ...rest) => {
         if (event === 'HlsSessionRequest') {
@@ -184,31 +184,31 @@ describe(HlsService.name, () => {
       });
     };
 
-    it('returns master playlist for eiffel-tower (1080p portrait, no acceleration)', async () => {
+    it('returns main playlist for eiffel-tower (1080p portrait, no acceleration)', async () => {
       setup(eiffelTower, TranscodeHardwareAcceleration.Disabled);
-      await expect(sut.getMasterPlaylist(auth, assetId)).resolves.toBe(eiffelExpectedMasterDisabled);
+      await expect(sut.getMainPlaylist(auth, assetId)).resolves.toBe(eiffelExpectedMasterDisabled);
     });
 
-    it('returns master playlist for eiffel-tower with RKMPP (no AV1 variants)', async () => {
+    it('returns main playlist for eiffel-tower with RKMPP (no AV1 variants)', async () => {
       setup(eiffelTower, TranscodeHardwareAcceleration.Rkmpp);
-      await expect(sut.getMasterPlaylist(auth, assetId)).resolves.toBe(eiffelExpectedMasterRkmpp);
+      await expect(sut.getMainPlaylist(auth, assetId)).resolves.toBe(eiffelExpectedMasterRkmpp);
     });
 
-    it('returns master playlist for waterfall (4K landscape) with no acceleration', async () => {
+    it('returns main playlist for waterfall (4K landscape) with no acceleration', async () => {
       setup(waterfall, TranscodeHardwareAcceleration.Disabled);
-      await expect(sut.getMasterPlaylist(auth, assetId)).resolves.toBe(waterfallExpectedMasterDisabled);
+      await expect(sut.getMainPlaylist(auth, assetId)).resolves.toBe(waterfallExpectedMasterDisabled);
     });
 
     it('throws BadRequestException when realtime transcoding is disabled', async () => {
       mocks.access.asset.checkOwnerAccess.mockResolvedValue(new Set([assetId]));
       mocks.systemMetadata.get.mockResolvedValue({ ffmpeg: { realtime: { enabled: false } } });
-      await expect(sut.getMasterPlaylist(auth, assetId)).rejects.toBeInstanceOf(BadRequestException);
+      await expect(sut.getMainPlaylist(auth, assetId)).rejects.toBeInstanceOf(BadRequestException);
     });
 
     it('throws NotFoundException when asset is not yet ready for streaming', async () => {
       mocks.access.asset.checkOwnerAccess.mockResolvedValue(new Set([assetId]));
       mocks.systemMetadata.get.mockResolvedValue({ ffmpeg: { realtime: { enabled: true } } });
-      await expect(sut.getMasterPlaylist(auth, assetId)).rejects.toBeInstanceOf(NotFoundException);
+      await expect(sut.getMainPlaylist(auth, assetId)).rejects.toBeInstanceOf(NotFoundException);
     });
   });
 

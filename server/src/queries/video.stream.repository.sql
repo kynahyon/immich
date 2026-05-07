@@ -48,7 +48,7 @@ delete from "video_stream_session"
 where
   "id" = $1
 
--- VideoStreamRepository.getForMasterPlaylist
+-- VideoStreamRepository.getForMainPlaylist
 select
   (
     select

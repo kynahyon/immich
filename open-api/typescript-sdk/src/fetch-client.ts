@@ -4270,9 +4270,9 @@ export function playAssetVideo({ id, key, slug }: {
     }));
 }
 /**
- * Get HLS master playlist
+ * Get HLS main playlist
  */
-export function getMasterPlaylist({ id, key, slug }: {
+export function getMainPlaylist({ id, key, slug }: {
     id: string;
     key?: string;
     slug?: string;
@@ -4280,7 +4280,7 @@ export function getMasterPlaylist({ id, key, slug }: {
     return oazapfts.ok(oazapfts.fetchBlob<{
         status: 200;
         data: string;
-    }>(`/assets/${encodeURIComponent(id)}/video/stream/master.m3u8${QS.query(QS.explode({
+    }>(`/assets/${encodeURIComponent(id)}/video/stream/main.m3u8${QS.query(QS.explode({
         key,
         slug
     }))}`, {

@@ -4300,10 +4300,10 @@
         "x-immich-state": "Stable"
       }
     },
-    "/assets/{id}/video/stream/master.m3u8": {
+    "/assets/{id}/video/stream/main.m3u8": {
       "get": {
-        "description": "Returns an HLS master playlist with all available variants for the asset.",
-        "operationId": "getMasterPlaylist",
+        "description": "Returns an HLS main playlist with all available variants for the asset.",
+        "operationId": "getMainPlaylist",
         "parameters": [
           {
             "name": "id",
@@ -4355,7 +4355,7 @@
             "api_key": []
           }
         ],
-        "summary": "Get HLS master playlist",
+        "summary": "Get HLS main playlist",
         "tags": [
           "Assets"
         ],

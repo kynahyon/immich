@@ -48,14 +48,14 @@ export class HlsService extends BaseService {
     this.pendingSegments.complete(this.getSegmentKey(event), event);
   }
 
-  async getMasterPlaylist(auth: AuthDto, assetId: string) {
+  async getMainPlaylist(auth: AuthDto, assetId: string) {
     await this.requireAccess({ auth, permission: Permission.AssetView, ids: [assetId] });
     const { ffmpeg } = await this.getConfig({ withCache: true });
     if (!ffmpeg.realtime.enabled) {
       throw new BadRequestException('Real-time transcoding is not enabled');
     }
 
-    const asset = await this.videoStreamRepository.getForMasterPlaylist(assetId);
+    const asset = await this.videoStreamRepository.getForMainPlaylist(assetId);
     if (!asset) {
       throw new NotFoundException('Asset is not yet ready for streaming');
     }
@@ -65,7 +65,7 @@ export class HlsService extends BaseService {
     await this.pendingSessions.wait(sessionId);
     this.sessions.set(sessionId, { lastRequestedSegment: null });
 
-    return this.generateMasterPlaylist(sessionId, ffmpeg, asset);
+    return this.generateMainPlaylist(sessionId, ffmpeg, asset);
   }
 
   async getMediaPlaylist(auth: AuthDto, assetId: string, sessionId: string) {
@@ -114,7 +114,7 @@ export class HlsService extends BaseService {
     this.websocketRepository.serverSend('HlsSessionEnd', { sessionId });
   }
 
-  private generateMasterPlaylist(sessionId: string, ffmpeg: SystemConfigFFmpegDto, asset: AssetWithStreamInfo) {
+  private generateMainPlaylist(sessionId: string, ffmpeg: SystemConfigFFmpegDto, asset: AssetWithStreamInfo) {
     const fps = ((asset.packets.packetCount * asset.videoStream.timeBase) / asset.packets.totalDuration).toFixed(3);
     const sourceResolution = Math.min(asset.videoStream.height, asset.videoStream.width);
     const lines = ['#EXTM3U', `#EXT-X-VERSION:${HLS_VERSION}`];
