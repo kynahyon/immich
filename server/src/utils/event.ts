@@ -28,10 +28,13 @@ export class PendingEvents<T extends { [T in EmitEvent]: ArgOf<T> extends { erro
     }
     clearTimeout(pending.timeout);
     this.pending.delete(key);
-    for (const completer of pending.completers) {
-      if ('error' in value) {
-        completer.reject(new Error(value.error));
-      } else {
+    if ('error' in value) {
+      const error = new Error(value.error);
+      for (const completer of pending.completers) {
+        completer.reject(error);
+      }
+    } else {
+      for (const completer of pending.completers) {
         completer.resolve(value);
       }
     }
