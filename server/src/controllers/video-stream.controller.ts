@@ -1,7 +1,7 @@
 import { Controller, Delete, Get, Header, HttpCode, HttpStatus, Next, Param, Res } from '@nestjs/common';
 import { ApiProduces, ApiTags } from '@nestjs/swagger';
 import { NextFunction, Response } from 'express';
-import { PLAYLIST_CONTENT_TYPE } from 'src/constants';
+import { HLS_PLAYLIST_CONTENT_TYPE } from 'src/constants';
 import { Endpoint, HistoryBuilder } from 'src/decorators';
 import { AuthDto } from 'src/dtos/auth.dto';
 import { HlsSegmentParamDto, HlsSessionParamDto, HlsVariantParamDto } from 'src/dtos/streaming.dto';
@@ -23,8 +23,8 @@ export class VideoStreamController {
   @Get(':id/video/stream/main.m3u8')
   @Authenticated({ permission: Permission.AssetView, sharedLink: true })
   @Header('Cache-Control', 'no-cache')
-  @Header('Content-Type', PLAYLIST_CONTENT_TYPE)
-  @ApiProduces(PLAYLIST_CONTENT_TYPE)
+  @Header('Content-Type', HLS_PLAYLIST_CONTENT_TYPE)
+  @ApiProduces(HLS_PLAYLIST_CONTENT_TYPE)
   @Endpoint({
     summary: 'Get HLS main playlist',
     description: 'Returns an HLS main playlist with all available variants for the asset.',
@@ -37,8 +37,8 @@ export class VideoStreamController {
   @Get(':id/video/stream/:sessionId/:variantIndex/playlist.m3u8')
   @Authenticated({ permission: Permission.AssetView, sharedLink: true })
   @Header('Cache-Control', 'no-cache')
-  @Header('Content-Type', PLAYLIST_CONTENT_TYPE)
-  @ApiProduces(PLAYLIST_CONTENT_TYPE)
+  @Header('Content-Type', HLS_PLAYLIST_CONTENT_TYPE)
+  @ApiProduces(HLS_PLAYLIST_CONTENT_TYPE)
   @Endpoint({
     summary: 'Get HLS media playlist',
     description: 'Returns an HLS media playlist for one variant of the streaming session.',

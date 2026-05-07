@@ -8,8 +8,8 @@ import {
   HLS_INACTIVITY_TIMEOUT_MS,
   HLS_LEASE_DURATION_MS,
   HLS_SEGMENT_DURATION,
+  HLS_SEGMENT_FILENAME_REGEX,
   HLS_VARIANTS,
-  SEGMENT_FILENAME_REGEX,
 } from 'src/constants';
 import { StorageCore } from 'src/cores/storage.core';
 import { OnEvent, OnJob } from 'src/decorators';
@@ -267,7 +267,7 @@ export class TranscodingService extends BaseService {
       if (eventType !== 'rename' || !filename || session.process !== process) {
         return;
       }
-      const match = SEGMENT_FILENAME_REGEX.exec(filename);
+      const match = HLS_SEGMENT_FILENAME_REGEX.exec(filename);
       if (!match) {
         return;
       }

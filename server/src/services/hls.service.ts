@@ -3,9 +3,9 @@ import { constants } from 'node:fs';
 import { join } from 'node:path';
 import {
   HLS_SEGMENT_DURATION,
+  HLS_SEGMENT_FILENAME_REGEX,
   HLS_VARIANTS,
   HLS_VERSION,
-  SEGMENT_FILENAME_REGEX,
   SUPPORTED_HWA_CODECS,
 } from 'src/constants';
 import { StorageCore } from 'src/cores/storage.core';
@@ -175,7 +175,7 @@ export class HlsService extends BaseService {
     if (filename.endsWith('.mp4')) {
       return (existing?.lastRequestedSegment ?? -1) + 1;
     }
-    const segmentIndex = Number.parseInt(SEGMENT_FILENAME_REGEX.exec(filename)![1]);
+    const segmentIndex = Number.parseInt(HLS_SEGMENT_FILENAME_REGEX.exec(filename)![1]);
     if (existing) {
       existing.lastRequestedSegment = segmentIndex;
     } else {

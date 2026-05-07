@@ -225,7 +225,9 @@ export const HLS_BACKPRESSURE_RESUME_SEGMENTS = 15;
 export const HLS_CLEANUP_INTERVAL_MS = 60 * 1000;
 export const HLS_INACTIVITY_TIMEOUT_MS = 5 * 60 * 1000;
 export const HLS_LEASE_DURATION_MS = 30 * 60 * 1000;
+export const HLS_PLAYLIST_CONTENT_TYPE = 'application/vnd.apple.mpegurl';
 export const HLS_SEGMENT_DURATION = 2;
+export const HLS_SEGMENT_FILENAME_REGEX = /^seg_(\d+)\.m4s$/;
 export const HLS_VARIANTS = [
   { resolution: 480, codec: VideoCodec.Av1, bitrate: 1_000_000, codecString: 'av01.0.04M.08' },
   { resolution: 480, codec: VideoCodec.Hevc, bitrate: 1_200_000, codecString: 'hvc1.1.6.L90.B0' },
@@ -241,5 +243,3 @@ export const HLS_VARIANTS = [
   { resolution: 1440, codec: VideoCodec.H264, bitrate: 16_000_000, codecString: 'avc1.640032' },
 ];
 export const HLS_VERSION = 6;
-export const PLAYLIST_CONTENT_TYPE = 'application/vnd.apple.mpegurl';
-export const SEGMENT_FILENAME_REGEX = /^seg_(\d+)\.m4s$/;
