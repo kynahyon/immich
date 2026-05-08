@@ -1,4 +1,10 @@
-import { HLS_CLEANUP_INTERVAL_MS, HLS_INACTIVITY_TIMEOUT_MS, HLS_LEASE_DURATION_MS } from 'src/constants';
+import {
+  HLS_BACKPRESSURE_PAUSE_SEGMENTS,
+  HLS_BACKPRESSURE_RESUME_SEGMENTS,
+  HLS_CLEANUP_INTERVAL_MS,
+  HLS_INACTIVITY_TIMEOUT_MS,
+  HLS_LEASE_DURATION_MS,
+} from 'src/constants';
 import { TranscodingService } from 'src/services/transcoding.service';
 import { VIDEO_STREAM_SESSION_PK_CONSTRAINT } from 'src/utils/database';
 import { eiffelTower, train, waterfall } from 'test/fixtures/media.stub';
@@ -158,6 +164,105 @@ describe(TranscodingService.name, () => {
       await sut.onSegmentRequest({ sessionId: 'never-created', assetId, variantIndex: 0, segmentIndex: 0 });
 
       expect(mocks.process.spawn).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('backpressure', () => {
+    let proc: ReturnType<typeof mockSpawn>;
+
+    beforeEach(async () => {
+      proc = mockSpawn(0, '', '');
+      mocks.process.spawn.mockReturnValue(proc);
+
+      await sut.onSessionRequest({ sessionId, assetId, ownerId });
+      await sut.onSegmentRequest({ sessionId, assetId, variantIndex: 0, segmentIndex: 0 });
+    });
+
+    const completeSegment = (index: number) => {
+      const listener = vi.mocked(mocks.storage.watchDir).mock.lastCall?.[1];
+      expect(listener).toBeDefined();
+      listener!('rename', `seg_${index}.m4s`);
+    };
+
+    it('pauses the transcode once the lead exceeds HLS_BACKPRESSURE_PAUSE_SEGMENTS', async () => {
+      completeSegment(HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
+
+      await sut.onHeartbeat({ sessionId, segmentIndex: 0 });
+
+      expect(proc.kill).toHaveBeenCalledWith('SIGSTOP');
+    });
+
+    it('does not pause when the lead equals the pause threshold', async () => {
+      completeSegment(HLS_BACKPRESSURE_PAUSE_SEGMENTS);
+
+      await sut.onHeartbeat({ sessionId, segmentIndex: 0 });
+
+      expect(proc.kill).not.toHaveBeenCalled();
+    });
+
+    it('resumes once the lead drops below HLS_BACKPRESSURE_RESUME_SEGMENTS', async () => {
+      completeSegment(HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
+      await sut.onHeartbeat({ sessionId, segmentIndex: 0 });
+      expect(proc.kill).toHaveBeenCalledWith('SIGSTOP');
+      vi.mocked(proc.kill).mockClear();
+
+      const requested = HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1 - (HLS_BACKPRESSURE_RESUME_SEGMENTS - 1);
+      await sut.onHeartbeat({ sessionId, segmentIndex: requested });
+
+      expect(proc.kill).toHaveBeenCalledWith('SIGCONT');
+    });
+
+    it('stays paused while the lead is in the dead-band', async () => {
+      completeSegment(HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
+      await sut.onHeartbeat({ sessionId, segmentIndex: 0 });
+      vi.mocked(proc.kill).mockClear();
+
+      const requested = HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1 - HLS_BACKPRESSURE_RESUME_SEGMENTS;
+      await sut.onHeartbeat({ sessionId, segmentIndex: requested });
+
+      expect(proc.kill).not.toHaveBeenCalled();
+    });
+
+    it('is a no-op when no segment has completed yet', async () => {
+      await sut.onHeartbeat({ sessionId, segmentIndex: 0 });
+
+      expect(proc.kill).not.toHaveBeenCalled();
+    });
+
+    it('is a no-op when the heartbeat omits segmentIndex', async () => {
+      completeSegment(HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
+
+      await sut.onHeartbeat({ sessionId });
+
+      expect(proc.kill).not.toHaveBeenCalled();
+    });
+
+    it('resumes the paused transcode when the client requests the next in-range segment', async () => {
+      completeSegment(HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
+      await sut.onHeartbeat({ sessionId, segmentIndex: 0 });
+      expect(proc.kill).toHaveBeenCalledWith('SIGSTOP');
+      vi.mocked(proc.kill).mockClear();
+
+      await sut.onSegmentRequest({ sessionId, assetId, variantIndex: 0, segmentIndex: 1 });
+
+      expect(proc.kill).toHaveBeenCalledWith('SIGCONT');
+      expect(mocks.process.spawn).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not re-pause a freshly spawned transcode after a seek-driven restart', async () => {
+      const newProc = mockSpawn(0, '', '');
+      mocks.process.spawn.mockReturnValueOnce(newProc);
+
+      completeSegment(HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
+      await sut.onHeartbeat({ sessionId, segmentIndex: 0 });
+      expect(proc.kill).toHaveBeenCalledWith('SIGSTOP');
+
+      await sut.onSegmentRequest({ sessionId, assetId, variantIndex: 1, segmentIndex: 0 });
+      vi.mocked(newProc.kill).mockClear();
+
+      await sut.onHeartbeat({ sessionId, segmentIndex: 0 });
+
+      expect(newProc.kill).not.toHaveBeenCalled();
     });
   });
 

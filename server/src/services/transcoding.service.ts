@@ -158,6 +158,7 @@ export class TranscodingService extends BaseService {
       return;
     }
     const lead = session.lastCompletedSegment - session.lastClientRequestedSegment;
+    this.logger.debug(`Session ${session.id} lead is ${lead} segments`);
     if (!session.paused && lead > HLS_BACKPRESSURE_PAUSE_SEGMENTS) {
       this.pauseTranscode(session);
     } else if (session.paused && lead < HLS_BACKPRESSURE_RESUME_SEGMENTS) {
@@ -278,6 +279,7 @@ export class TranscodingService extends BaseService {
         variantIndex,
         segmentIndex,
       });
+      this.applyBackpressure(session);
     });
     watcher.on('error', (error) => {
       this.logger.error(`watcher error for ${variantDir}: ${error}`);
@@ -315,6 +317,7 @@ export class TranscodingService extends BaseService {
     this.resumeTranscode(session);
     session.process.kill();
     session.process = null;
+    session.lastCompletedSegment = null;
   }
 
   private pauseTranscode(session: Session) {
@@ -323,6 +326,7 @@ export class TranscodingService extends BaseService {
     }
     session.process.kill('SIGSTOP');
     session.paused = true;
+    this.logger.debug(`Paused transcoding for session ${session.id}`);
   }
 
   private resumeTranscode(session: Session) {
@@ -331,6 +335,7 @@ export class TranscodingService extends BaseService {
     }
     session.process.kill('SIGCONT');
     session.paused = false;
+    this.logger.debug(`Resumed transcoding for session ${session.id}`);
   }
 
   private async removeSessionDir(session: { ownerId: string; id: string }) {
