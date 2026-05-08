@@ -19,6 +19,12 @@ describe(TranscodingService.name, () => {
   const assetId = 'asset-1';
   const ownerId = 'user-1';
 
+  const completeSegment = (index: number) => {
+    const listener = vi.mocked(mocks.storage.watchDir).mock.lastCall?.[1];
+    expect(listener).toBeDefined();
+    listener!('rename', `seg_${index}.m4s`);
+  };
+
   beforeEach(() => {
     ({ sut, mocks } = newTestService(TranscodingService));
     mocks.systemMetadata.get.mockResolvedValue({ ffmpeg: { realtime: { enabled: true } } });
@@ -177,12 +183,6 @@ describe(TranscodingService.name, () => {
       await sut.onSessionRequest({ sessionId, assetId, ownerId });
       await sut.onSegmentRequest({ sessionId, assetId, variantIndex: 0, segmentIndex: 0 });
     });
-
-    const completeSegment = (index: number) => {
-      const listener = vi.mocked(mocks.storage.watchDir).mock.lastCall?.[1];
-      expect(listener).toBeDefined();
-      listener!('rename', `seg_${index}.m4s`);
-    };
 
     it('pauses the transcode once the lead exceeds HLS_BACKPRESSURE_PAUSE_SEGMENTS', async () => {
       completeSegment(HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
