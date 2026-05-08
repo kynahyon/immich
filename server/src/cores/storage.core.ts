@@ -130,7 +130,7 @@ export class StorageCore {
   }
 
   static getHlsSessionFolder({ ownerId, sessionId }: HlsSessionFolder) {
-    return StorageCore.getNestedFolder(StorageFolder.EncodedVideo, ownerId, sessionId);
+    return StorageCore.getNestedPath(StorageFolder.EncodedVideo, ownerId, sessionId);
   }
 
   static getHlsVariantFolder({ ownerId, sessionId, variantIndex }: HlsVariantFolder) {

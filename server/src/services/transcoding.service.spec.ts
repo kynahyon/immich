@@ -260,8 +260,8 @@ describe(TranscodingService.name, () => {
           '-svtav1-params',
           'hierarchical-levels=3:lookahead=0:enable-tf=0:mbr=4000k',
           '-hls_segment_filename',
-          '/data/encoded-video/user-1/se/ss/6/seg_%d.m4s',
-          '/data/encoded-video/user-1/se/ss/6/playlist.m3u8',
+          '/data/encoded-video/user-1/se/ss/session-1/6/seg_%d.m4s',
+          '/data/encoded-video/user-1/se/ss/session-1/6/playlist.m3u8',
         ].sort(),
       },
       {
@@ -285,8 +285,8 @@ describe(TranscodingService.name, () => {
           '-vf',
           'scale=720:-2',
           '-hls_segment_filename',
-          '/data/encoded-video/user-1/se/ss/4/seg_%d.m4s',
-          '/data/encoded-video/user-1/se/ss/4/playlist.m3u8',
+          '/data/encoded-video/user-1/se/ss/session-1/4/seg_%d.m4s',
+          '/data/encoded-video/user-1/se/ss/session-1/4/playlist.m3u8',
         ].sort(),
       },
       {
@@ -308,8 +308,8 @@ describe(TranscodingService.name, () => {
           '-vf',
           'scale=480:-2',
           '-hls_segment_filename',
-          '/data/encoded-video/user-1/se/ss/2/seg_%d.m4s',
-          '/data/encoded-video/user-1/se/ss/2/playlist.m3u8',
+          '/data/encoded-video/user-1/se/ss/session-1/2/seg_%d.m4s',
+          '/data/encoded-video/user-1/se/ss/session-1/2/playlist.m3u8',
         ].sort(),
       },
     ])('builds the expected FFmpeg command for $codec (variant $variantIndex)', async ({ variantIndex, expected }) => {
