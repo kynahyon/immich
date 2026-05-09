@@ -319,10 +319,12 @@ export class TranscodingService extends BaseService {
     if (!session.process) {
       return;
     }
-    this.resumeTranscode(session);
-    session.process.kill();
+    // SIGTERM makes it rename .tmp segments to .m4s even if they're still incomplete
+    session.process.kill('SIGKILL');
     session.process = null;
     session.lastCompletedSegment = null;
+    session.paused = false;
+    this.logger.debug(`Stopped transcoding for session ${session.id}`);
   }
 
   private pauseTranscode(session: Session) {
