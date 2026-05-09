@@ -273,6 +273,11 @@ export class TranscodingService extends BaseService {
         return;
       }
       const segmentIndex = Number.parseInt(match[1]);
+      const expected = session.lastCompletedSegment === null ? session.startSegment : session.lastCompletedSegment + 1;
+      // Ignore stale events from old process after seek
+      if (expected === null || segmentIndex !== expected) {
+        return;
+      }
       session.lastCompletedSegment = segmentIndex;
       this.websocketRepository.serverSend('HlsSegmentResult', {
         sessionId: session.id,

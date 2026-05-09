@@ -25,6 +25,12 @@ describe(TranscodingService.name, () => {
     listener!('rename', `seg_${index}.m4s`);
   };
 
+  const completeSegmentsThrough = (start: number, end: number) => {
+    for (let i = start; i <= end; i++) {
+      completeSegment(i);
+    }
+  };
+
   beforeEach(() => {
     ({ sut, mocks } = newTestService(TranscodingService));
     mocks.systemMetadata.get.mockResolvedValue({ ffmpeg: { realtime: { enabled: true } } });
@@ -185,7 +191,7 @@ describe(TranscodingService.name, () => {
     });
 
     it('pauses the transcode once the lead exceeds HLS_BACKPRESSURE_PAUSE_SEGMENTS', async () => {
-      completeSegment(HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
+      completeSegmentsThrough(0, HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
 
       await sut.onHeartbeat({ sessionId, segmentIndex: 0 });
 
@@ -193,7 +199,7 @@ describe(TranscodingService.name, () => {
     });
 
     it('does not pause when the lead equals the pause threshold', async () => {
-      completeSegment(HLS_BACKPRESSURE_PAUSE_SEGMENTS);
+      completeSegmentsThrough(0, HLS_BACKPRESSURE_PAUSE_SEGMENTS);
 
       await sut.onHeartbeat({ sessionId, segmentIndex: 0 });
 
@@ -201,7 +207,7 @@ describe(TranscodingService.name, () => {
     });
 
     it('resumes once the lead drops below HLS_BACKPRESSURE_RESUME_SEGMENTS', async () => {
-      completeSegment(HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
+      completeSegmentsThrough(0, HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
       await sut.onHeartbeat({ sessionId, segmentIndex: 0 });
       expect(proc.kill).toHaveBeenCalledWith('SIGSTOP');
       vi.mocked(proc.kill).mockClear();
@@ -213,7 +219,7 @@ describe(TranscodingService.name, () => {
     });
 
     it('stays paused while the lead is in the dead-band', async () => {
-      completeSegment(HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
+      completeSegmentsThrough(0, HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
       await sut.onHeartbeat({ sessionId, segmentIndex: 0 });
       vi.mocked(proc.kill).mockClear();
 
@@ -230,7 +236,7 @@ describe(TranscodingService.name, () => {
     });
 
     it('is a no-op when the heartbeat omits segmentIndex', async () => {
-      completeSegment(HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
+      completeSegmentsThrough(0, HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
 
       await sut.onHeartbeat({ sessionId });
 
@@ -238,7 +244,7 @@ describe(TranscodingService.name, () => {
     });
 
     it('resumes the paused transcode when the client requests the next in-range segment', async () => {
-      completeSegment(HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
+      completeSegmentsThrough(0, HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
       await sut.onHeartbeat({ sessionId, segmentIndex: 0 });
       expect(proc.kill).toHaveBeenCalledWith('SIGSTOP');
       vi.mocked(proc.kill).mockClear();
@@ -253,7 +259,7 @@ describe(TranscodingService.name, () => {
       const newProc = mockSpawn(0, '', '');
       mocks.process.spawn.mockReturnValueOnce(newProc);
 
-      completeSegment(HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
+      completeSegmentsThrough(0, HLS_BACKPRESSURE_PAUSE_SEGMENTS + 1);
       await sut.onHeartbeat({ sessionId, segmentIndex: 0 });
       expect(proc.kill).toHaveBeenCalledWith('SIGSTOP');
 
@@ -263,6 +269,32 @@ describe(TranscodingService.name, () => {
       await sut.onHeartbeat({ sessionId, segmentIndex: 0 });
 
       expect(newProc.kill).not.toHaveBeenCalled();
+    });
+
+    it('ignores stale segment events from the prior transcode after a backward seek', async () => {
+      const newProc = mockSpawn(0, '', '');
+      mocks.process.spawn.mockReturnValueOnce(newProc);
+
+      const completedAhead = HLS_BACKPRESSURE_PAUSE_SEGMENTS + 5;
+      completeSegmentsThrough(1, completedAhead); // seg_0 was emitted in beforeEach
+
+      await sut.onSegmentRequest({ sessionId, assetId, variantIndex: 1, segmentIndex: 0 });
+
+      vi.mocked(newProc.kill).mockClear();
+      mocks.websocket.serverSend.mockClear();
+      completeSegment(completedAhead + 1);
+
+      expect(mocks.websocket.serverSend).not.toHaveBeenCalledWith(
+        'HlsSegmentResult',
+        expect.objectContaining({ segmentIndex: completedAhead + 1 }),
+      );
+      expect(newProc.kill).not.toHaveBeenCalled();
+
+      completeSegment(0);
+      expect(mocks.websocket.serverSend).toHaveBeenCalledWith(
+        'HlsSegmentResult',
+        expect.objectContaining({ segmentIndex: 0 }),
+      );
     });
   });
 
