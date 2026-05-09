@@ -303,6 +303,16 @@ describe(HlsService.name, () => {
       });
     });
 
+    it('rejects pending waiters for the previous variant on variant change', async () => {
+      mocks.storage.checkFileExists.mockResolvedValueOnce(false);
+
+      const pending = sut.getSegment(auth, assetId, sessionId, 0, 'seg_1.m4s');
+      await new Promise((resolve) => setImmediate(resolve));
+      await sut.getSegment(auth, assetId, sessionId, 1, 'seg_1.m4s');
+
+      await expect(pending).rejects.toThrow('Variant changed');
+    });
+
     it('throws NotFoundException when the session does not exist', async () => {
       mocks.videoStream.getSession.mockReset();
       await expect(sut.getSegment(auth, assetId, sessionId, variantIndex, 'init.mp4')).rejects.toBeInstanceOf(
