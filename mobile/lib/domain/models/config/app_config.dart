@@ -1,4 +1,5 @@
 import 'package:immich_mobile/domain/models/config/album_config.dart';
+import 'package:immich_mobile/domain/models/config/backup_config.dart';
 import 'package:immich_mobile/domain/models/config/cleanup_config.dart';
 import 'package:immich_mobile/domain/models/config/image_config.dart';
 import 'package:immich_mobile/domain/models/config/map_config.dart';
@@ -14,6 +15,7 @@ class AppConfig {
   final ImageConfig image;
   final ViewerConfig viewer;
   final AlbumConfig album;
+  final BackupConfig backup;
 
   const AppConfig({
     this.theme = const .new(),
@@ -23,6 +25,7 @@ class AppConfig {
     this.image = const .new(),
     this.viewer = const .new(),
     this.album = const .new(),
+    this.backup = const .new(),
   });
 
   AppConfig copyWith({
@@ -33,6 +36,7 @@ class AppConfig {
     ImageConfig? image,
     ViewerConfig? viewer,
     AlbumConfig? album,
+    BackupConfig? backup,
   }) => .new(
     theme: theme ?? this.theme,
     cleanup: cleanup ?? this.cleanup,
@@ -41,6 +45,7 @@ class AppConfig {
     image: image ?? this.image,
     viewer: viewer ?? this.viewer,
     album: album ?? this.album,
+    backup: backup ?? this.backup,
   );
 
   @override
@@ -53,12 +58,13 @@ class AppConfig {
           other.timeline == timeline &&
           other.image == image &&
           other.viewer == viewer &&
-          other.album == album);
+          other.album == album &&
+          other.backup == backup);
 
   @override
-  int get hashCode => Object.hash(theme, cleanup, map, timeline, image, viewer, album);
+  int get hashCode => Object.hash(theme, cleanup, map, timeline, image, viewer, album, backup);
 
   @override
   String toString() =>
-      'AppConfig(theme: $theme, cleanup: $cleanup, map: $map, timeline: $timeline, image: $image, viewer: $viewer, album: $album)';
+      'AppConfig(theme: $theme, cleanup: $cleanup, map: $map, timeline: $timeline, image: $image, viewer: $viewer, album: $album, backup: $backup)';
 }

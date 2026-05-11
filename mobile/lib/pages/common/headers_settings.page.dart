@@ -91,8 +91,9 @@ class HeaderSettingsPage extends HookConsumerWidget {
       headersMap[key] = value;
     }
 
+    final apiService = ref.read(apiServiceProvider);
     await ref.read(metadataProvider).write(MetadataKey.networkCustomHeaders, headersMap);
-    await ref.read(apiServiceProvider).updateHeaders();
+    await apiService.updateHeaders();
   }
 }
 

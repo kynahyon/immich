@@ -6,13 +6,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:immich_mobile/domain/models/setting.model.dart';
 import 'package:immich_mobile/extensions/build_context_extensions.dart';
 import 'package:immich_mobile/models/server_info/server_info.model.dart';
 import 'package:immich_mobile/providers/backup/drift_backup.provider.dart';
 import 'package:immich_mobile/providers/cast.provider.dart';
+import 'package:immich_mobile/providers/infrastructure/metadata.provider.dart';
 import 'package:immich_mobile/providers/infrastructure/readonly_mode.provider.dart';
-import 'package:immich_mobile/providers/infrastructure/setting.provider.dart';
 import 'package:immich_mobile/providers/server_info.provider.dart';
 import 'package:immich_mobile/providers/sync_status.provider.dart';
 import 'package:immich_mobile/providers/timeline/multiselect.provider.dart';
@@ -193,18 +192,14 @@ class _BackupIndicator extends ConsumerWidget {
   }
 
   Widget? _getBackupBadgeIcon(BuildContext context, WidgetRef ref) {
-    final backupStateStream = ref.watch(settingsProvider).watch(Setting.enableBackup);
+    final backupEnabled = ref.watch(appConfigProvider.select((c) => c.backup.enabled));
     final hasError = ref.watch(driftBackupProvider.select((state) => state.error != BackupError.none));
     final isDarkTheme = context.isDarkTheme;
     final iconColor = isDarkTheme ? Colors.white : Colors.black;
     final isUploading = ref.watch(driftBackupProvider.select((state) => state.uploadItems.isNotEmpty));
 
-    return StreamBuilder(
-      stream: backupStateStream,
-      initialData: false,
-      builder: (ctx, snapshot) {
-        final backupEnabled = snapshot.data ?? false;
-
+    return Builder(
+      builder: (ctx) {
         if (!backupEnabled) {
           return _BadgeLabel(
             Icon(
