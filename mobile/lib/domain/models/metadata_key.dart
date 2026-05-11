@@ -20,94 +20,72 @@ enum MetadataDomain<T extends Object> {
 
 enum MetadataKey<T extends Object> {
   // Theme
-  themePrimaryColor<ImmichColorPreset>(.appConfig, 'theme.primaryColor', .indigo, _EnumCodec(ImmichColorPreset.values)),
-  themeMode<ThemeMode>(.appConfig, 'theme.mode', .system, _EnumCodec(ThemeMode.values)),
-  themeDynamic<bool>(.appConfig, 'theme.dynamic', false),
-  themeColorfulInterface<bool>(.appConfig, 'theme.colorfulInterface', true),
+  themePrimaryColor<ImmichColorPreset>(.appConfig, .indigo, _EnumCodec(ImmichColorPreset.values)),
+  themeMode<ThemeMode>(.appConfig, .system, _EnumCodec(ThemeMode.values)),
+  themeDynamic<bool>(.appConfig, false),
+  themeColorfulInterface<bool>(.appConfig, true),
 
   // Image
-  imagePreferRemote<bool>(.appConfig, 'image.preferRemote', false),
-  imageLoadOriginal<bool>(.appConfig, 'image.loadOriginal', false),
+  imagePreferRemote<bool>(.appConfig, false),
+  imageLoadOriginal<bool>(.appConfig, false),
 
   // Viewer
-  viewerLoopVideo<bool>(.appConfig, 'viewer.loopVideo', true),
-  viewerLoadOriginalVideo<bool>(.appConfig, 'viewer.loadOriginalVideo', false),
-  viewerAutoPlayVideo<bool>(.appConfig, 'viewer.autoPlayVideo', true),
-  viewerTapToNavigate<bool>(.appConfig, 'viewer.tapToNavigate', false),
+  viewerLoopVideo<bool>(.appConfig, true),
+  viewerLoadOriginalVideo<bool>(.appConfig, false),
+  viewerAutoPlayVideo<bool>(.appConfig, true),
+  viewerTapToNavigate<bool>(.appConfig, false),
 
   // Network
-  networkAutoEndpointSwitching<bool>(.systemConfig, 'network.autoEndpointSwitching', false),
-  networkPreferredWifiName<String>(.systemConfig, 'network.preferredWifiName', ''),
-  networkLocalEndpoint<String>(.systemConfig, 'network.localEndpoint', ''),
-  networkExternalEndpointList<List<String>>(
-    .systemConfig,
-    'network.externalEndpointList',
-    [],
-    _ListCodec(_PrimitiveCodec.string),
-  ),
+  networkAutoEndpointSwitching<bool>(.systemConfig, false),
+  networkPreferredWifiName<String>(.systemConfig, ''),
+  networkLocalEndpoint<String>(.systemConfig, ''),
+  networkExternalEndpointList<List<String>>(.systemConfig, [], _ListCodec(_PrimitiveCodec.string)),
   networkCustomHeaders<Map<String, String>>(
     .systemConfig,
-    'network.customHeaders',
     {},
     _MapCodec(_PrimitiveCodec.string, _PrimitiveCodec.string),
   ),
 
   // Album
-  albumSortMode<AlbumSortMode>(
-    .appConfig,
-    'album.sortMode',
-    AlbumSortMode.mostRecent,
-    _EnumCodec(AlbumSortMode.values),
-  ),
-  albumIsReverse<bool>(.appConfig, 'album.isReverse', true),
-  albumIsGrid<bool>(.appConfig, 'album.isGrid', false),
+  albumSortMode<AlbumSortMode>(.appConfig, AlbumSortMode.mostRecent, _EnumCodec(AlbumSortMode.values)),
+  albumIsReverse<bool>(.appConfig, true),
+  albumIsGrid<bool>(.appConfig, false),
 
   // Backup
-  backupEnabled<bool>(.appConfig, 'backup.enabled', false),
-  backupUseCellularForVideos<bool>(.appConfig, 'backup.useCellularForVideos', false),
-  backupUseCellularForPhotos<bool>(.appConfig, 'backup.useCellularForPhotos', false),
-  backupRequireCharging<bool>(.appConfig, 'backup.requireCharging', false),
-  backupTriggerDelay<int>(.appConfig, 'backup.triggerDelay', 30),
-  backupSyncAlbums<bool>(.appConfig, 'backup.syncAlbums', false),
+  backupEnabled<bool>(.appConfig, false),
+  backupUseCellularForVideos<bool>(.appConfig, false),
+  backupUseCellularForPhotos<bool>(.appConfig, false),
+  backupRequireCharging<bool>(.appConfig, false),
+  backupTriggerDelay<int>(.appConfig, 30),
+  backupSyncAlbums<bool>(.appConfig, false),
 
   // Timeline
-  timelineTilesPerRow<int>(.appConfig, 'timeline.tilesPerRow', 4),
-  timelineGroupAssetsBy<GroupAssetsBy>(
-    .appConfig,
-    'timeline.groupAssetsBy',
-    GroupAssetsBy.day,
-    _EnumCodec(GroupAssetsBy.values),
-  ),
-  timelineStorageIndicator<bool>(.appConfig, 'timeline.storageIndicator', true),
+  timelineTilesPerRow<int>(.appConfig, 4),
+  timelineGroupAssetsBy<GroupAssetsBy>(.appConfig, GroupAssetsBy.day, _EnumCodec(GroupAssetsBy.values)),
+  timelineStorageIndicator<bool>(.appConfig, true),
 
   // Log
-  logLevel<LogLevel>(.systemConfig, 'log.level', .info, _EnumCodec(LogLevel.values)),
+  logLevel<LogLevel>(.systemConfig, .info, _EnumCodec(LogLevel.values)),
 
   // Map
-  mapShowFavoriteOnly<bool>(.appConfig, 'map.showFavoriteOnly', false),
-  mapRelativeDate<int>(.appConfig, 'map.relativeDate', 0),
-  mapIncludeArchived<bool>(.appConfig, 'map.includeArchived', false),
-  mapThemeMode<ThemeMode>(.appConfig, 'map.themeMode', .system, _EnumCodec(ThemeMode.values)),
-  mapWithPartners<bool>(.appConfig, 'map.withPartners', false),
+  mapShowFavoriteOnly<bool>(.appConfig, false),
+  mapRelativeDate<int>(.appConfig, 0),
+  mapIncludeArchived<bool>(.appConfig, false),
+  mapThemeMode<ThemeMode>(.appConfig, .system, _EnumCodec(ThemeMode.values)),
+  mapWithPartners<bool>(.appConfig, false),
 
   // Cleanup
-  cleanupKeepFavorites<bool>(.appConfig, 'cleanup.keepFavorites', true),
-  cleanupKeepMediaType<AssetKeepType>(
-    .appConfig,
-    'cleanup.keepMediaType',
-    AssetKeepType.none,
-    _EnumCodec(AssetKeepType.values),
-  ),
-  cleanupKeepAlbumIds<List<String>>(.appConfig, 'cleanup.keepAlbumIds', [], _ListCodec(_PrimitiveCodec.string)),
-  cleanupCutoffDaysAgo<int>(.appConfig, 'cleanup.cutoffDaysAgo', -1),
-  cleanupDefaultsInitialized<bool>(.appConfig, 'cleanup.defaultsInitialized', false);
+  cleanupKeepFavorites<bool>(.appConfig, true),
+  cleanupKeepMediaType<AssetKeepType>(.appConfig, AssetKeepType.none, _EnumCodec(AssetKeepType.values)),
+  cleanupKeepAlbumIds<List<String>>(.appConfig, [], _ListCodec(_PrimitiveCodec.string)),
+  cleanupCutoffDaysAgo<int>(.appConfig, -1),
+  cleanupDefaultsInitialized<bool>(.appConfig, false);
 
   final MetadataDomain domain;
-  final String name;
   final T defaultValue;
   final _MetadataCodec<T>? _codecOverride;
 
-  const MetadataKey(this.domain, this.name, this.defaultValue, [this._codecOverride]);
+  const MetadataKey(this.domain, this.defaultValue, [this._codecOverride]);
 
   String get key => '${domain.prefix}.$name';
 
