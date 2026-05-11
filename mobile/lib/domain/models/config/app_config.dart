@@ -1,3 +1,4 @@
+import 'package:immich_mobile/domain/models/config/album_config.dart';
 import 'package:immich_mobile/domain/models/config/cleanup_config.dart';
 import 'package:immich_mobile/domain/models/config/image_config.dart';
 import 'package:immich_mobile/domain/models/config/map_config.dart';
@@ -12,6 +13,7 @@ class AppConfig {
   final TimelineConfig timeline;
   final ImageConfig image;
   final ViewerConfig viewer;
+  final AlbumConfig album;
 
   const AppConfig({
     this.theme = const .new(),
@@ -20,6 +22,7 @@ class AppConfig {
     this.timeline = const .new(),
     this.image = const .new(),
     this.viewer = const .new(),
+    this.album = const .new(),
   });
 
   AppConfig copyWith({
@@ -29,6 +32,7 @@ class AppConfig {
     TimelineConfig? timeline,
     ImageConfig? image,
     ViewerConfig? viewer,
+    AlbumConfig? album,
   }) => .new(
     theme: theme ?? this.theme,
     cleanup: cleanup ?? this.cleanup,
@@ -36,6 +40,7 @@ class AppConfig {
     timeline: timeline ?? this.timeline,
     image: image ?? this.image,
     viewer: viewer ?? this.viewer,
+    album: album ?? this.album,
   );
 
   @override
@@ -47,12 +52,13 @@ class AppConfig {
           other.map == map &&
           other.timeline == timeline &&
           other.image == image &&
-          other.viewer == viewer);
+          other.viewer == viewer &&
+          other.album == album);
 
   @override
-  int get hashCode => Object.hash(theme, cleanup, map, timeline, image, viewer);
+  int get hashCode => Object.hash(theme, cleanup, map, timeline, image, viewer, album);
 
   @override
   String toString() =>
-      'AppConfig(theme: $theme, cleanup: $cleanup, map: $map, timeline: $timeline, image: $image, viewer: $viewer)';
+      'AppConfig(theme: $theme, cleanup: $cleanup, map: $map, timeline: $timeline, image: $image, viewer: $viewer, album: $album)';
 }

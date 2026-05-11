@@ -134,6 +134,11 @@ extension<T extends Object> on MetadataDomain<T> {
             autoPlayVideo: repo._read(.viewerAutoPlayVideo),
             tapToNavigate: repo._read(.viewerTapToNavigate),
           ),
+          album: .new(
+            sortMode: repo._read(.albumSortMode),
+            isReverse: repo._read(.albumIsReverse),
+            isGrid: repo._read(.albumIsGrid),
+          ),
         );
       case .systemConfig:
         repo._systemConfig = .new(
