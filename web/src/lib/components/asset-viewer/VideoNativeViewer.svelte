@@ -177,7 +177,6 @@
     api.on(Hls.Events.FRAG_LOADED, () => (rebuildCount = 0));
 
     api.on(Hls.Events.ERROR, (_, data) => {
-      console.error('HLS error', JSON.stringify(data));
       // 404 on a fragment can mean the server-side session has expired. Refetch
       // master for a new session, but give up if it still 404s.
       if (
@@ -186,8 +185,10 @@
         data.response?.code !== 404 ||
         rebuildCount++ >= MAX_REBUILDS
       ) {
+        console.error('HLS error', JSON.stringify(data));
         return;
       }
+      console.warn('Error loading segment, starting new session');
       activeSession = undefined;
       resumeTime = el.currentTime;
       el.load();
