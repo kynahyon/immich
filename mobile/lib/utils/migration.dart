@@ -241,6 +241,9 @@ class _StoreMigrator {
   Future<void> complete() async {
     await _db.batch((batch) {
       for (final entry in _cache.entries) {
+        if (entry.value == entry.key.defaultValue) {
+          continue;
+        }
         batch.insert(
           _db.metadataEntity,
           MetadataEntityCompanion(key: Value(entry.key.key), value: Value(entry.key.encode(entry.value))),

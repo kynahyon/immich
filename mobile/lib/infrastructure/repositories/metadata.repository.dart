@@ -50,6 +50,9 @@ class MetadataRepository extends DriftDatabaseRepository {
 
   Future<void> write<T extends Object, U extends T>(MetadataKey<T> key, U value) async {
     if (_read(key) == value) return;
+    if (value == key.defaultValue) {
+      return delete(key);
+    }
 
     await _db
         .into(_db.metadataEntity)
