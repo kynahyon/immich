@@ -188,6 +188,4 @@ ImageProvider? getThumbnailImageProvider(BaseAsset asset, {Size size = kThumbnai
 }
 
 bool _shouldUseLocalAsset(BaseAsset asset) =>
-    asset.hasLocal &&
-    (!asset.hasRemote || !MetadataRepository.instance.appConfig.image.preferRemote) &&
-    !asset.isEdited;
+    asset.hasLocal && (!asset.hasRemote || !MetadataStore.appConfig.image.preferRemote) && !asset.isEdited;

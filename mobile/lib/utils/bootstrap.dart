@@ -49,7 +49,7 @@ abstract final class Bootstrap {
 
     await StoreService.init(storeRepository: storeRepo, listenUpdates: listenStoreUpdates);
 
-    final metadataRepo = await MetadataRepository.ensureInitialized(drift);
+    final metadataRepo = await MetadataStore.ensureInitialized(drift);
 
     await LogService.init(
       logRepository: LogRepository(logDb),

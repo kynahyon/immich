@@ -38,7 +38,7 @@ void main() {
     );
     db = Drift(DatabaseConnection(NativeDatabase.memory(), closeStreamsSynchronously: true));
     await StoreService.init(storeRepository: DriftStoreRepository(db));
-    await MetadataRepository.ensureInitialized(db);
+    await MetadataStore.ensureInitialized(db);
 
     await Store.put(StoreKey.serverEndpoint, 'http://test-server.com');
     await Store.put(StoreKey.deviceId, 'test-device-id');

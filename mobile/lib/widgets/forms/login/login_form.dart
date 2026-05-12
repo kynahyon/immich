@@ -179,7 +179,7 @@ class LoginForm extends HookConsumerWidget {
       await backgroundManager.syncRemote();
       await backgroundManager.hashAssets();
 
-      if (MetadataRepository.instance.appConfig.backup.syncAlbums) {
+      if (MetadataStore.appConfig.backup.syncAlbums) {
         await backgroundManager.syncLinkedAlbum();
       }
     }

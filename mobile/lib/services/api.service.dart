@@ -177,7 +177,7 @@ class ApiService {
     if (serverEndpoint != null && serverEndpoint.isNotEmpty) {
       urls.add(serverEndpoint);
     }
-    final network = MetadataRepository.instance.systemConfig.network;
+    final network = MetadataStore.systemConfig.network;
     final localEndpoint = network.localEndpoint;
     if (localEndpoint != null) {
       urls.add(localEndpoint);
@@ -189,7 +189,7 @@ class ApiService {
   }
 
   static Map<String, String> getRequestHeaders() {
-    return MetadataRepository.instance.systemConfig.network.customHeaders;
+    return MetadataStore.systemConfig.network.customHeaders;
   }
 
   ApiClient get apiClient => _apiClient;

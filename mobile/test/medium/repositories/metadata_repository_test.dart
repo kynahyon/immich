@@ -14,7 +14,7 @@ void main() {
 
   setUpAll(() async {
     ctx = MediumRepositoryContext();
-    sut = await MetadataRepository.ensureInitialized(ctx.db);
+    sut = MetadataRepository(ctx.db);
   });
 
   tearDownAll(() async {
@@ -23,7 +23,7 @@ void main() {
 
   setUp(() async {
     await ctx.db.delete(ctx.db.metadataEntity).go();
-    await MetadataRepository.refresh();
+    await sut.refresh();
   });
 
   group('defaults', () {
@@ -78,7 +78,7 @@ void main() {
       // Cache hasn't seen this row yet — view still returns the default.
       expect(sut.appConfig.theme.mode, ThemeMode.system);
 
-      await MetadataRepository.refresh();
+      await sut.refresh();
       expect(sut.appConfig.theme.mode, ThemeMode.dark);
     });
 
@@ -88,7 +88,7 @@ void main() {
       await ctx.db.delete(ctx.db.metadataEntity).go();
       expect(sut.appConfig.theme.mode, ThemeMode.dark);
 
-      await MetadataRepository.refresh();
+      await sut.refresh();
       expect(sut.appConfig.theme.mode, ThemeMode.system);
     });
 
@@ -103,7 +103,7 @@ void main() {
             ),
           );
 
-      await MetadataRepository.refresh();
+      await sut.refresh();
       expect(sut.appConfig.theme.mode, ThemeMode.system);
     });
   });

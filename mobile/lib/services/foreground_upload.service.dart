@@ -7,8 +7,8 @@ import 'package:immich_mobile/domain/models/asset/asset_metadata.model.dart';
 import 'package:immich_mobile/domain/models/asset/base_asset.model.dart';
 import 'package:immich_mobile/domain/models/store.model.dart';
 import 'package:immich_mobile/entities/store.entity.dart';
-import 'package:immich_mobile/extensions/platform_extensions.dart';
 import 'package:immich_mobile/extensions/network_capability_extensions.dart';
+import 'package:immich_mobile/extensions/platform_extensions.dart';
 import 'package:immich_mobile/extensions/translate_extensions.dart';
 import 'package:immich_mobile/infrastructure/repositories/backup.repository.dart';
 import 'package:immich_mobile/infrastructure/repositories/metadata.repository.dart';
@@ -449,7 +449,7 @@ class ForegroundUploadService {
   }
 
   bool _shouldRequireWiFi(LocalAsset asset) {
-    final backup = MetadataRepository.instance.appConfig.backup;
+    final backup = MetadataStore.appConfig.backup;
     if (asset.isVideo && backup.useCellularForVideos) return false;
     if (!asset.isVideo && backup.useCellularForPhotos) return false;
     return true;

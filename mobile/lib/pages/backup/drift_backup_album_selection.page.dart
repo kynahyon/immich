@@ -101,7 +101,7 @@ class _DriftBackupAlbumSelectionPageState extends ConsumerState<DriftBackupAlbum
             return;
           }
 
-          final isBackupEnabled = MetadataRepository.instance.appConfig.backup.enabled;
+          final isBackupEnabled = MetadataStore.appConfig.backup.enabled;
           await ref.read(driftBackupProvider.notifier).getBackupStatus(user.id);
           final currentTotalAssetCount = ref.read(driftBackupProvider.select((p) => p.totalCount));
           final totalChanged = currentTotalAssetCount != _initialTotalAssetCount;

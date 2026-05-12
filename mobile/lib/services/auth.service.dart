@@ -100,7 +100,7 @@ class AuthService {
         _log.severe("Error clearing local data", error, stackTrace);
       });
 
-      await MetadataRepository.instance.write(MetadataKey.backupEnabled, false);
+      await MetadataStore.instance.write(MetadataKey.backupEnabled, false);
     }
   }
 

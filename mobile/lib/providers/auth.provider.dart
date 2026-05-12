@@ -131,7 +131,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     await _apiService.updateHeaders();
 
     final serverEndpoint = Store.get(StoreKey.serverEndpoint);
-    final headerMap = MetadataRepository.instance.systemConfig.network.customHeaders;
+    final headerMap = MetadataStore.systemConfig.network.customHeaders;
     final customHeaders = headerMap.isEmpty ? null : jsonEncode(headerMap);
     await _widgetService.writeCredentials(serverEndpoint, accessToken, customHeaders);
 

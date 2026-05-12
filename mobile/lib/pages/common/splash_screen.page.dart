@@ -341,7 +341,7 @@ class SplashScreenPageState extends ConsumerState<SplashScreenPage> {
                 await backgroundManager.hashAssets();
               }
 
-              if (MetadataRepository.instance.appConfig.backup.syncAlbums) {
+              if (MetadataStore.appConfig.backup.syncAlbums) {
                 await backgroundManager.syncLinkedAlbum();
               }
             } catch (e) {
@@ -370,7 +370,7 @@ class SplashScreenPageState extends ConsumerState<SplashScreenPage> {
   }
 
   Future<void> _resumeBackup(DriftBackupNotifier notifier) async {
-    final isEnableBackup = MetadataRepository.instance.appConfig.backup.enabled;
+    final isEnableBackup = MetadataStore.appConfig.backup.enabled;
 
     if (isEnableBackup) {
       final currentUser = Store.tryGet(StoreKey.currentUser);

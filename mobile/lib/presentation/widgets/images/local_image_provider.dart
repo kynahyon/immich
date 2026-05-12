@@ -102,7 +102,7 @@ class LocalFullImageProvider extends CancellableImageProvider<LocalFullImageProv
       return;
     }
 
-    final loadOriginal = MetadataRepository.instance.appConfig.image.loadOriginal;
+    final loadOriginal = MetadataStore.appConfig.image.loadOriginal;
     final devicePixelRatio = PlatformDispatcher.instance.views.first.devicePixelRatio;
     var request = this.request = LocalImageRequest(
       localId: key.id,

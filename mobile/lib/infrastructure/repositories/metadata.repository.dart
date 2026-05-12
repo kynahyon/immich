@@ -6,12 +6,7 @@ import 'package:immich_mobile/extensions/string_extensions.dart';
 import 'package:immich_mobile/infrastructure/entities/metadata.entity.drift.dart';
 import 'package:immich_mobile/infrastructure/repositories/db.repository.dart';
 
-class MetadataRepository extends DriftDatabaseRepository {
-  final Drift _db;
-  final Map<MetadataKey, Object> _cache = {};
-
-  MetadataRepository._(this._db) : super(_db);
-
+abstract final class MetadataStore {
   static MetadataRepository? _instance;
 
   static MetadataRepository get instance {
@@ -22,26 +17,36 @@ class MetadataRepository extends DriftDatabaseRepository {
     return instance;
   }
 
-  AppConfig _appConfig = const .new();
-  AppConfig get appConfig => _appConfig;
-
-  SystemConfig _systemConfig = const .new();
-  SystemConfig get systemConfig => _systemConfig;
-
   static Future<MetadataRepository> ensureInitialized(Drift db) async {
     if (_instance == null) {
-      final instance = MetadataRepository._(db);
+      final instance = MetadataRepository(db);
       await instance._hydrate();
       _instance = instance;
     }
     return _instance!;
   }
 
-  static Future<void> refresh() async {
-    instance._cache.clear();
-    instance._appConfig = const .new();
-    instance._systemConfig = const .new();
-    await instance._hydrate();
+  static AppConfig get appConfig => instance.appConfig;
+  static SystemConfig get systemConfig => instance.systemConfig;
+}
+
+class MetadataRepository extends DriftDatabaseRepository {
+  final Drift _db;
+  final Map<MetadataKey, Object> _cache = {};
+
+  MetadataRepository(this._db) : super(_db);
+
+  AppConfig _appConfig = const .new();
+  AppConfig get appConfig => _appConfig;
+
+  SystemConfig _systemConfig = const .new();
+  SystemConfig get systemConfig => _systemConfig;
+
+  Future<void> refresh() async {
+    _cache.clear();
+    _appConfig = const .new();
+    _systemConfig = const .new();
+    await _hydrate();
   }
 
   Future<void> _hydrate() async => _hydrateCache(await _db.select(_db.metadataEntity).get());

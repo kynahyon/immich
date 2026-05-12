@@ -45,7 +45,7 @@ class DriftBackupOptionsPage extends ConsumerWidget {
           }
 
           await ref.read(driftBackupProvider.notifier).getBackupStatus(currentUser.id);
-          final isBackupEnabled = MetadataRepository.instance.appConfig.backup.enabled;
+          final isBackupEnabled = MetadataStore.appConfig.backup.enabled;
           if (!isBackupEnabled) {
             return;
           }

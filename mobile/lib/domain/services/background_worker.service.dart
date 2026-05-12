@@ -39,7 +39,7 @@ class BackgroundWorkerFgService {
       _foregroundHostApi.saveNotificationMessage(title, body);
 
   Future<void> configure({int? minimumDelaySeconds, bool? requireCharging}) {
-    final backup = MetadataRepository.instance.appConfig.backup;
+    final backup = MetadataStore.appConfig.backup;
     return _foregroundHostApi.configure(
       BackgroundWorkerSettings(
         minimumDelaySeconds: minimumDelaySeconds ?? backup.triggerDelay,
@@ -69,7 +69,7 @@ class BackgroundWorkerBgService extends BackgroundWorkerFlutterApi {
     BackgroundWorkerFlutterApi.setUp(this);
   }
 
-  bool get _isBackupEnabled => MetadataRepository.instance.appConfig.backup.enabled;
+  bool get _isBackupEnabled => MetadataStore.appConfig.backup.enabled;
 
   Future<void> init() async {
     try {

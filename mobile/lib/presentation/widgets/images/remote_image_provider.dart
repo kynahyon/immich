@@ -120,7 +120,7 @@ class RemoteFullImageProvider extends CancellableImageProvider<RemoteFullImagePr
         edited: key.edited,
       ),
     );
-    final loadOriginal = assetType == AssetType.image && MetadataRepository.instance.appConfig.image.loadOriginal;
+    final loadOriginal = assetType == AssetType.image && MetadataStore.appConfig.image.loadOriginal;
     yield* loadRequest(previewRequest, decode, isFinal: !loadOriginal);
 
     if (!loadOriginal) {
