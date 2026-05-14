@@ -22,6 +22,7 @@
   import type { TimelineAsset, TimelineManagerOptions, ViewportTopMonth } from '$lib/managers/timeline-manager/types';
   import { assetsSnapshot } from '$lib/managers/timeline-manager/utils.svelte';
   import { mediaQueryManager } from '$lib/stores/media-query-manager.svelte';
+  import { handlePromiseError } from '$lib/utils';
   import { isAssetViewerRoute, navigate } from '$lib/utils/navigation';
   import { getTimes, type ScrubberListener } from '$lib/utils/timeline-util';
   import { type AlbumResponseDto, type PersonResponseDto, type UserResponseDto } from '@immich/sdk';
@@ -581,11 +582,13 @@
     }
 
     const openViewer = () => void navigate({ targetRoute: 'current', assetId: asset.id });
-    startViewerTransition(
-      asset.id,
-      openViewer,
-      (id) => (toViewerHeroAssetId = id),
-      () => (toViewerHeroAssetId = null),
+    handlePromiseError(
+      startViewerTransition(
+        asset.id,
+        openViewer,
+        (id) => (toViewerHeroAssetId = id),
+        () => (toViewerHeroAssetId = null),
+      ),
     );
   };
 </script>

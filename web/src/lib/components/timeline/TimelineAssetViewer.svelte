@@ -99,7 +99,9 @@
 
   const handleClose = async (assetId: string) => {
     if (viewTransitionManager.isSupported()) {
-      const transitionReady = assetViewerManager.untilNext('ViewerCloseTransitionReady');
+      const transitionReady = assetViewerManager.untilNext('ViewerCloseTransitionReady', {
+        signal: AbortSignal.timeout(200),
+      });
       assetViewerManager.emit('ViewerCloseTransition', { id: assetId });
       await transitionReady;
     }

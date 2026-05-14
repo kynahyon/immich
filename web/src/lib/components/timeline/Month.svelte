@@ -10,6 +10,7 @@
   import { assetsSnapshot, filterIsInOrNearViewport } from '$lib/managers/timeline-manager/utils.svelte';
   import { viewTransitionManager } from '$lib/managers/ViewTransitionManager.svelte';
   import { uploadAssetsStore } from '$lib/stores/upload';
+  import { handlePromiseError } from '$lib/utils';
   import type { CommonPosition } from '$lib/utils/layout-utils';
   import { fromTimelinePlainDate, getDateLocaleString } from '$lib/utils/timeline-util';
   import { Icon } from '@immich/ui';
@@ -68,19 +69,21 @@
     if (!asset) {
       return;
     }
-    void viewTransitionManager.startTransition({
-      types: ['timeline'],
-      performUpdate: async () => {
-        assetViewerManager.emit('ViewerCloseTransitionReady');
-        const event = await eventManager.untilNext('TimelineLoaded');
-        toTimelineHeroAssetId = event.id;
-        await tick();
-      },
-      onFinished: () => {
-        toTimelineHeroAssetId = null;
-        focusAsset(asset.id);
-      },
-    });
+    handlePromiseError(
+      viewTransitionManager.startTransition({
+        types: ['timeline'],
+        performUpdate: async () => {
+          assetViewerManager.emit('ViewerCloseTransitionReady');
+          const event = await eventManager.untilNext('TimelineLoaded');
+          toTimelineHeroAssetId = event.id;
+          await tick();
+        },
+        onFinished: () => {
+          toTimelineHeroAssetId = null;
+          focusAsset(asset.id);
+        },
+      }),
+    );
   };
   if (viewTransitionManager.isSupported()) {
     onMount(() => assetViewerManager.on({ ViewerCloseTransition: handleViewerCloseTransition }));
