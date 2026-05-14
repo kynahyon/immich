@@ -238,8 +238,5 @@ export const HLS_VARIANTS = [
   { resolution: 1080, codec: VideoCodec.Av1, bitrate: 4_000_000, codecString: 'av01.0.09M.08' },
   { resolution: 1080, codec: VideoCodec.Hevc, bitrate: 4_500_000, codecString: 'hvc1.1.6.L120.B0' },
   { resolution: 1080, codec: VideoCodec.H264, bitrate: 8_000_000, codecString: 'avc1.640028' },
-  { resolution: 1440, codec: VideoCodec.Av1, bitrate: 7_000_000, codecString: 'av01.0.12M.08' },
-  { resolution: 1440, codec: VideoCodec.Hevc, bitrate: 8_000_000, codecString: 'hvc1.2.4.L150.B0' },
-  { resolution: 1440, codec: VideoCodec.H264, bitrate: 16_000_000, codecString: 'avc1.640032' },
 ];
 export const HLS_VERSION = 6;
