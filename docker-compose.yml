@@ -66,11 +66,12 @@ services:
       -c 'search_path="$$user", public, vectors'
       -c logging_collector=on
       -c max_wal_size=2GB
-      -c shared_buffers=512MB
+      -c shared_buffers=1GB
       -c wal_compression=lz4
     restart: always
     # Personal note: bump shared_buffers if the host has more than 8GB RAM
     # e.g. shared_buffers=1GB for a 16GB machine
+    # My host has 32GB RAM so bumped to 1GB (was 512MB)
 
 volumes:
   model-cache:
