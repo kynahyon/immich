@@ -65,3 +65,9 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
       POSTGRES_USER: ${DB_USERNAME:-postgres}
       POSTGRES_DB: ${DB_DATABASE_NAME:-immich}
+    # Keep dev DB data persistent across restarts so I don't lose test uploads
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_dev_data:
