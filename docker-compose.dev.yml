@@ -1,0 +1,67 @@
+# Development override for docker-compose.yml
+# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+version: "3.8"
+
+services:
+  immich-server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+      target: development
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=verbose
+    command: npm run start:debug
+    ports:
+      - 2283:3001
+      - 9229:9229  # Node.js debug port
+
+  immich-microservices:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+      target: development
+    volumes:
+      - ./server:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+      - LOG_LEVEL=verbose
+    command: npm run start:microservices:debug
+    ports:
+      - 9230:9229  # Node.js debug port for microservices
+
+  immich-web:
+    build:
+      context: .
+      dockerfile: web/Dockerfile
+      target: development
+    volumes:
+      - ./web:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_SERVER_ENDPOINT=http://localhost:2283
+    command: npm run dev -- --host
+    ports:
+      - 2283:3000
+
+  immich-machine-learning:
+    environment:
+      - LOG_LEVEL=debug
+
+  redis:
+    ports:
+      - 6379:6379  # Expose Redis for local debugging
+
+  database:
+    ports:
+      - 5432:5432  # Expose PostgreSQL for local debugging
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_DB: ${DB_DATABASE_NAME:-immich}
