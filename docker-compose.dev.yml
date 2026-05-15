@@ -68,6 +68,11 @@ services:
     # Keep dev DB data persistent across restarts so I don't lose test uploads
     volumes:
       - postgres_dev_data:/var/lib/postgresql/data
+    # Tune Postgres for faster dev performance (not safe for production)
+    command: >-
+      postgres
+      -c shared_buffers=256MB
+      -c synchronous_commit=off
 
 volumes:
   postgres_dev_data:
