@@ -73,6 +73,8 @@ services:
       postgres
       -c shared_buffers=256MB
       -c synchronous_commit=off
+      -c max_connections=50
+      -c work_mem=16MB
 
 volumes:
   postgres_dev_data:
