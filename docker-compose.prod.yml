@@ -95,5 +95,6 @@ services:
     logging:
       driver: 'json-file'
       options:
-        max-size: '10m'
-        max-file: '3'
+        # Increased log retention for easier debugging on my home server
+        max-size: '20m'
+        max-file: '5'
