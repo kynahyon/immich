@@ -73,9 +73,10 @@ services:
       postgres
       -c shared_buffers=512MB
       -c synchronous_commit=off
-      -c max_connections=100
+      -c max_connections=200
       -c work_mem=16MB
       -c effective_cache_size=1GB
+      -c log_min_duration_statement=500
 
 volumes:
   postgres_dev_data:
