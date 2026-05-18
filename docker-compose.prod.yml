@@ -42,7 +42,8 @@ services:
     deploy:
       resources:
         limits:
-          memory: 4G
+          # Bumped from 4G - ML tasks were hitting the limit on my machine
+          memory: 6G
         reservations:
           memory: 1G
     logging:
